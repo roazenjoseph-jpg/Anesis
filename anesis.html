@@ -1,317 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <meta charset="UFT-8">
+    <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Anesis website</title>
          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
-        <style type="text/css">
-            body {
-             margin: 0;
-             font-family: Arial, sans-serif;
-            }
-            /* Navbar container */
-            .navbar {
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url(n.jpg);
-                padding: 5px 10px;
-                border-radius: 8px;
-            }
-            /* Logo container */
-            .logo {
-                font-size: 25px;
-                font-weight: bold;
-                color: white;
-            }
-            .logo img {
-                height: 60px;
-                width: auto;
-                border-radius: 8px;
-                padding: 5px;
-                transform: scale(1.15);
-                background: -o-repeating-linear-gradient(#b3effa);
-                image-rendering: crisp-edges;
-                object-fit: contain;
-            }
-            /* Menu links */
-            .nav-links {
-                display: flex;
-                gap: 20px;
-                list-style: none;
-                background-color: #3b3b39;
-                position: relative;
-                padding-top: 0px;
-                top: 0;
-                height: 100%;
-                align-items: center;
-                width: 100%;
-            }
-            .nav-links a {
-                color: white;
-                text-decoration: none;
-                transition: 0.3s;
-            }
-            .nav-links li {
-                 padding: 8px;
-                text-decoration: none;
-                 margin-top: 25px;
-        
-            }
-            .nav-links a:hover {
-                color: rgb(71, 209, 53);
-            }
-            /* Hamburger icon */
-            .hamburger {
-                width: 30px;
-                cursor: pointer;
-                position: relative;
-                flex-direction: column;
-                justify-content: space-between;
-                display: none;
-
-
-            }
-
-            .bar {
-                width: 25px;
-                height: 3px;
-                background: white;
-                margin: 4px 0;
-                transition: all 0.3s ease;
-            }
-                 .hamburger.active div:nth-child(1) {
-                    transform: rotate(45deg) translate(9px, 9px);
-                }
-                .hamburger.active div:nth-child(2) {
-                    opacity: 0;
-                }
-                .hamburger.active div:nth-child(3) {
-                    transform: rotate(-45deg) translate(6px, -6px);
-                }
-            /* Mobile styles */
-            @media (max-width: 768px) {
-                .nav-links {
-                    position: absolute;
-                    top: 37px;
-                    left: 0;
-                    background: rgb(56, 55, 53);
-                    flex-direction: column;
-                    width: 100%;
-                    display: none;
-                    padding: 0px;
-                }
-                    .helo {
-                        flex-direction: column;
-                        text-align: center;
-                        position: relative;
-                        overflow: hidden;
-                        width: 100%;    
-                }
-                .bar {
-                    transition: ✗;
-                }
-                .nav-links.active {
-                    display: flex;
-                }
-                .hamburger {
-                    display: flex;
-                }
-            }
-            .description {
-                background-color: #fdfcfc;
-                padding-top: 20px;
-                margin-top: 20px;
-                box-shadow: #b3effa;
-                width: 100%;
-                display: flex;
-                align-items: center;
-                justify-content: flex-start;
-            }
-            .helo {
-                 display: flex;
-                align-items: center;
-                justify-content: flex-start;
-                gap: 20px;
-            }
-            .look {
-                display: flex;
-                align-items: center;
-                gap: 40px;
-                padding: 50px;
-                background: #f9f9f9;
-                font-family: Arial, sans-serif;
-                box-shadow: rgb(53, 52, 52);
-            }
-            .text {
-                flex: 1;
-            }
-            .text h2 {
-                font-size: 28px;
-                color: #333;
-                margin-bottom: 15px;
-            }
-            .text p {
-                font-size: 16px;
-                color: #555;
-                margin-bottom: 15px;
-                line-height: 1.6;
-            }
-            .text ul  {
-                list-style: none;
-                padding: 0;
-                margin: 0 0 20px 0;
-            }
-            .text ul li {
-                font-size: 16px;
-                margin-bottom: 8px;
-                color: #333;
-                position: relative;
-                padding-left: 25px;
-            }
-            .text ul li::before {
-                content: "✔";
-                color: #00e63a;
-                font-weight: bold;
-                position: absolute;
-                left: 0;
-            }
-            .text a {
-                display: inline-block;
-                background: #0073e6;
-                color: white;
-                padding: 10px 20px;
-                border-radius: 5px;
-                text-decoration: none;
-                font-weight: bold;
-                transition: 0.3s;
-            }
-            .text a:hover {
-                background: #005bb5;
-            }
-            .mj {
-                flex: 1;
-            }
-            .mj img {
-                width: 100%;
-                border-radius: 10px;
-            }
-           .lan {
-            font-size: 28px; color: #00a6c4; margin-bottom: 40px; text-align: center;
-           } 
-           .services {
-            display: flex; justify-content: center; gap: 35px; flex-wrap: wrap;
-           }
-           .service-card {
-            background: #0066cc; color: #fff; width: 200px; padding: 25px; border-radius: 10px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1); transition: transform 0.3s ease, box-shadoww 0.3s ease;
-            position: relative; overflow: hidden;
-           }
-           .service-card:hover {
-            transform: translateY(-8px) scale(1.1);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
-           }
-           .service-card h3 {
-            margin: 0 0 10px; font-size: 20px; font-family: Arial, sans-serif;
-           }
-           .service-card p {
-            font-size: 14px; line-height: 1.5; margin-bottom: 15px; font-family: Arial, sans-serif;
-           }
-           .btn {
-           display: inline-block; background: #fff; color: #0066cc; padding: 8px 14px;
-           border-radius: 5px; text-decoration: none; font-size: 14px; font-weight: bold;
-           transition:  0.3s ease, color 0.3s ease;
-           }
-           .blue {background: #0077cc;}
-           .red {background: #b22222;}
-           .deep {background: #004d99;}
-           .bwoy {background: orange;}
-
-           .clean {
-            position: relative;
-            background-image: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url(kl.jpg);
-            background-size: cover;
-            color: white;
-            text-align: center;
-            padding: 100px 20px;
-            margin-top: 8px;
-            box-shadow: #333;
-            border-radius: 10px;
-           }
-           .clean .nick {
-            display: inline-block;
-            max-width: 800px;
-           }
-           .clean h2 {
-            font-size: 32px;
-            margin: 20px;
-           }
-           .clean p {
-            font-size: 18px;
-            margin-bottom: 30px;
-            line-height: 1.6;
-            flex: 1;
-           }
-           .ease {
-            background: #0073e6;
-            color: white;
-            padding: 12px 30px;
-            border-radius: 6px;
-            font-size: 18px; text-decoration: none; font-weight: bold; transition: 0.3s;
-           }
-           .ease:hover {
-            background: #005bb5;
-           }
-           #flame {
-            animation: swoosh 4s infinite ease-in-out;
-            transition: left center;
-           }
-           @keyframes swoosh {
-            0%, 100% {transform: translateX(0) rotate(0deg);}
-            50% {transform: translateX(10px) rotate(3deg);}
-           }
-            footer a {
-            margin: 0 10px;
-            color: #333;
-            text-decoration: none;
-        }
-        footer a:hover {
-            color: #000;
-        }
-        .tool {
-            position: relative;
-            bottom: 0px;
-            animation: ticker 20s linear infinite;
-            grid-template-columns: repeat(1, 1fr);
-            display: flex;
-            text-align: center;
-            gap: 20px;
-        }
-        .tool p {
-            display: inline-block;
-            margin: 0 80px;
-            font-size: 20px;
-            color: gold;
-            text-shadow: #131111;
-        }
-        @keyframes ticker {
-            from {
-                transform: translateX(100%);
-            }
-            to {
-                transform: translateX(-100%);
-            }
-        }
-        .Jk p {
-            color: #f1ebeb;
-            font-size: 16px;
-        }
-        .rex {
-            border-radius: 6px; display: flex; justify-content: center; gap: 35px; flex-wrap: wrap; 
-        }
-        </style>
+        <link rel="stylesheet" href="styles.css">
     
     </head>
     <body>
@@ -333,12 +28,12 @@
             </div>
             <ul class="nav-links">
                 <li><a href="anesis.html">Home</a></li>
-                <li><a href="#">About</a></li>
-                <li><a href="#">Services</a></li>
-                <li><a href="#">Contact</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#services">Services</a></li>
+                <li><a href="#contact">Contact</a></li>
                 
             </ul>
-            <div class="hamburger" onclick="toggleMenu()">
+            <div class="hamburger">
                 <div class="bar"></div>
                 <div class="bar"></div>
                 <div class="bar"></div>
@@ -365,7 +60,6 @@
                                 <p>"Talent wins games, but teamwork and intelligence win championships."
                                                  -Micheal Jordan
                                 </p>
-                            </img>
                 </div>
             </div>
         </section>
@@ -386,14 +80,15 @@
               </div>
               </div>
               </section>
-              <section>
-              <p><strong>Anesis Air Solutions</strong> is a trusted provider of 
-                innovation and reliable air conditioning, ventilation, and cooling solutions.
-                 We speciolize in the installation, repair, and maintenance of both
-                residential and commercial air systems, ensuring comfort, efficiency, and
-            clean air for every environment.</p>
-              </section> 
-              <section class="look">
+                            <section>
+                                <div class="text">
+                                      <h2 style="text-align:center;">Anesis Air Solutions</h2>
+                                    <p>
+                                        Anesis Air Solutions is a trusted provider of innovation and reliable air conditioning, ventilation, and cooling solutions. We specialize in the installation, repair, and maintenance of both residential and commercial air systems, ensuring comfort, efficiency, and clean air for every environment.
+                                    </p>
+                                </div>
+                            </section>
+              <section class="look" id="about">
                 <div class="mj">
                     <img src="gh.jpg" width="256" height="354">
                 </div>
@@ -410,12 +105,12 @@
                         <li>Upgrades and refurbrishment</li>
                         <li>24/7 emergency breakdown support</li>
                     </ul>
-                    <a href="#">Read More About Us</a>
+                        <a href="installation.html">Read More About Us</a>
                 </div>
               </section>
             </div>
         </section>
-       <section class="lan">
+       <section class="lan" id="services">
             <h2>Our Services</h2>
         </section> 
         <div class="services">
@@ -424,27 +119,27 @@
                 <p>We specialise in the design, installation,and maintenance
                     of commercial-air conditioning systems taylored to your needs.
                 </p>
-                <a href="installation.html" class="btn">READ MORE</a>
+                    <a href="installation.html" class="btn">READ MORE</a>
             </div>
             <div class="service-card red">
                 <h3>🦾 Maintenance</h3>
                 <p>Regular servicing to keep your sytems running at peak performance.
                     Prevent breakdowns and save energy with our expert maintenance solutions.
                 </p>
-                <a href="#" class="btn">READ MORE</a>
+                    <a href="installation.html" class="btn">READ MORE</a>
             </div>
             <div class="service-card deep">
                 <h3>⚙️ Repair</h3>
                <p>Fast and reliable repairs for air conditioning and ventilation systems.
                 We diagnose issues quickly and comfort in no time.</p>
-                <a href="#" class="btn">READ MORE</a> 
+                    <a href="installation.html" class="btn">READ MORE</a> 
             </div>
             <div class="service-card bwoy">
                 <h3>🧑‍🔧 Consultation</h3>
                 <p>Not sure what system fits your needs? Our experts provide tailord advice
                     on choosing the right air solution for your home or business.
                 </p>
-                <a href="#" class="btn">READ MORE</a>
+                    <a href="installation.html" class="btn">READ MORE</a>
             </div>
         </div>
         <section class="clean">
@@ -471,7 +166,7 @@
         </div>
         <div class="const" style="background: black; border-radius: 8px;">
         <section id="contact" style="padding: 50px; background:  #131111; border-radius: 8px; font-family: Arial, sans-serif;">
-        <form id="contact-form" action="https://formspree.io/f/YOUR_FORM_ID" method="POST"
+    <form id="contact-form" action="https://formspree.io/f/mrby1pan" method="POST"
           style="display: grid; gap: 15px; max-width: 600px; margin: auto; text-align: left;">
           <input type="text" name="name" placeholder="Your Name" required 
           style="padding: 12px; border: 1px solid #ccc;
@@ -487,9 +182,10 @@
                style="padding: 14px; background: #00a6c4; color: white; font-size: 16px; 
                border: none; border-radius: 8px; cursor: pointer; transition: 0.3s;">Send Message</button>
         </form>
-           <p id="success-message" style="display: none; margin-top: 20px; font-size: 16px; color: green;">
-            ✅ Thank you! Your message has been sent. We'll get back to you soon.
-           </p>
+                     <div id="success-message" style="display: none; margin-top: 20px; padding: 16px; border-radius: 8px; background: #e6ffed; color: #256029; font-size: 16px; border: 1px solid #b7eb8f; box-shadow: 0 2px 8px rgba(0,0,0,0.05); text-align: center;">
+                         <i class="fa fa-check-circle" style="color: #52c41a; margin-right: 8px;"></i>
+                         <strong>Thank you!</strong> Your message has been sent.<br>We'll get back to you soon.
+                     </div>
            </section>
            </div>
            <section>
@@ -536,33 +232,7 @@
 
             </section>
 
-        <script>
-            const form = document.getElementById("contact-form");
-            const successMsg = document.getElementById("success-message");
-
-            form.addEventListener("submit", async function (event) {
-                event.preventDefault();
-
-                const formdata = new FormData(form);
-                const response =await fetch(form.action, {
-                    method: form.method,
-                    headers: { 'Accept': 'application/json'}
-                });
-                if (response. ok) {
-                    form.reset();
-                    successMsg.style.display = "block";
-                } else {
-                    alert(" ✅ Thank you! Your message has been sent. We'll get back to you soon.");
-                }
-                
-                
-            });
-            function toggleMenu() {
-                document.querySelector('.nav-links').classList.toggle('active');
-
-                document.querySelector('.hamburger').classList.toggle('active');
-            }
-        </script>
+        <script src="script.js"></script>
         
     </body>
 </html>
