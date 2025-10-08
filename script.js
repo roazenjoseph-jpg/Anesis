@@ -8,6 +8,25 @@ document.addEventListener('DOMContentLoaded', function () {
     hamburger.addEventListener('click', function () {
       navLinks.classList.toggle('active');
       hamburger.classList.toggle('active');
+      if (navLinks.classList.contains('active')) {
+        hamburger.classList.add('hide');
+      } else {
+        hamburger.classList.remove('hide');
+      }
+    });
+    // Hide nav links after clicking a link
+    navLinks.addEventListener('click', function (e) {
+      if (e.target.tagName === 'A') {
+        navLinks.classList.remove('active');
+        hamburger.classList.remove('active');
+        hamburger.classList.remove('hide');
+      }
+    });
+    // Hide nav links when mouse leaves nav-links area
+    navLinks.addEventListener('mouseleave', function () {
+      navLinks.classList.remove('active');
+      hamburger.classList.remove('active');
+      hamburger.classList.remove('hide');
     });
   }
 
