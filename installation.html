@@ -7,6 +7,23 @@
          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
         <style type="text/css">
+            body.high-contrast {
+                background: #000 !important;
+                color: #fff !important;
+            }
+            body.high-contrast .navbar,
+            body.high-contrast .nav-links,
+            body.high-contrast .installation-section .overlay,
+            body.high-contrast .service-card,
+            body.high-contrast .btn {
+                background: #111 !important;
+                color: #fff !important;
+                border-color: #fff !important;
+            }
+            body.high-contrast a,
+            body.high-contrast .btn {
+                color: #ffd700 !important;
+            }
             body {
              margin: 0;
              font-family: Arial, sans-serif;
@@ -71,8 +88,11 @@
                 flex-direction: column;
                 justify-content: space-between;
                 display: none;
-
-
+                transition: opacity 0.3s;
+            }
+            .hamburger.hide {
+                opacity: 0;
+                pointer-events: none;
             }
 
             .bar {
@@ -206,15 +226,23 @@
             </div>
             <ul class="nav-links">
                 <li><a href="anesis.html">Home</a></li>
-                <li><a href="#">About</a></li>
-                <li><a href="#">Services</a></li>
-                <li><a href="#">Contact</a></li>
+                <li><a href="anesis.html#about">About</a></li>
+                <li><a href="anesis.html#services">Services</a></li>
+                <li><a href="anesis.html#contact">Contact</a></li>
                 
             </ul>
             <div class="hamburger" onclick="toggleMenu()">
                 <div class="bar"></div>
                 <div class="bar"></div>
                 <div class="bar"></div>
+            </div>
+            <div class="contrast-icon" style="position: absolute; top: 10px; right: 50px; cursor: pointer;">
+                                <i class="fas fa-adjust" title="Adjust Contrast" style="font-size: 24px; color: #fff;"></i>
+                                <div id="contrast-dropdown" style="display:none; position:absolute; top:30px; right:0; background:#222; color:#fff; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.15); min-width:220px; z-index:1001; padding:16px;">
+                                    <strong>Contrast Control</strong>
+                                    <p style="font-size:14px; margin:8px 0 12px 0;">High contrast mode improves readability for visually impaired users by increasing color separation and brightness.</p>
+                                      <button id="toggle-contrast" style="padding:8px 16px; background:#0073e6; color:#fff; border:none; border-radius:6px; cursor:pointer; font-weight:bold;">Toggle High Contrast</button>
+                                </div>
             </div>
                 
         </nav>
@@ -300,15 +328,71 @@
             </section>
 
         <script>
-             function toggleMenu() {
-                document.querySelector('.nav-links').classList.toggle('active');
+            // Dropdown for contrast info
+            document.addEventListener('DOMContentLoaded', function () {
+                var contrastIcon = document.querySelector('.contrast-icon');
+                var dropdown = document.getElementById('contrast-dropdown');
+                var toggleBtn = document.getElementById('toggle-contrast');
+                contrastIcon.addEventListener('click', function (e) {
+                    e.stopPropagation();
+                    dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+                });
+                toggleBtn.addEventListener('click', function (e) {
+                    e.stopPropagation();
+                    document.body.classList.toggle('high-contrast');
+                });
+                document.body.addEventListener('click', function () {
+                    dropdown.style.display = 'none';
+                });
+                dropdown.addEventListener('mouseleave', function () {
+                    dropdown.style.display = 'none';
+                });
+            });
+                                     function toggleMenu() {
+                                            var navLinks = document.querySelector('.nav-links');
+                                            var hamburger = document.querySelector('.hamburger');
+                                            navLinks.classList.toggle('active');
+                                            hamburger.classList.toggle('active');
+                                            if (navLinks.classList.contains('active')) {
+                                                hamburger.classList.add('hide');
+                                            } else {
+                                                hamburger.classList.remove('hide');
+                                            }
+                                    }
 
-                document.querySelector('.hamburger').classList.toggle('active');
-            }
-            function showAlert(e) {
-                e.preventDefault();
-                alert("Gallery still under development. Click Ok to continue!");
-            }
+                                    // Hide nav links after clicking a link
+                                    document.addEventListener('DOMContentLoaded', function () {
+                                        var navLinks = document.querySelector('.nav-links');
+                                        var hamburger = document.querySelector('.hamburger');
+                                        if (navLinks) {
+                                            navLinks.addEventListener('click', function (e) {
+                                                if (e.target.tagName === 'A') {
+                                                    navLinks.classList.remove('active');
+                                                    hamburger.classList.remove('active');
+                                                    hamburger.classList.remove('hide');
+                                                }
+                                            });
+                                            // Hide nav links when mouse leaves nav-links area
+                                            navLinks.addEventListener('mouseleave', function () {
+                                                navLinks.classList.remove('active');
+                                                hamburger.classList.remove('active');
+                                                hamburger.classList.remove('hide');
+                                            });
+                                        }
+                                    });
+
+                                    function showAlert(e) {
+                                        e.preventDefault();
+                                        alert("Gallery still under development. Click Ok to continue!");
+                                    }
+
+                                    // Contrast toggle functionality
+                                    document.addEventListener('DOMContentLoaded', function () {
+                                        var contrastIcon = document.querySelector('.contrast-icon');
+                                        contrastIcon.addEventListener('click', function () {
+                                            document.body.classList.toggle('high-contrast');
+                                        });
+                                    });
         </script>
             </body>
             </html>
