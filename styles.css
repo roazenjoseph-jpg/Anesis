@@ -399,3 +399,17 @@ footer a[href*="pinterest"] i {
 footer a i {
   transition: color 0.15s ease;
 }
+
+/* Make service cards display two per row on small screens (phones) */
+@media (max-width: 600px) {
+  .services {
+    gap: 16px;
+    justify-content: center;
+  }
+  .service-card {
+    flex: 0 1 calc(50% - 16px);
+    width: auto;
+    box-sizing: border-box;
+    margin: 0;
+  }
+}
