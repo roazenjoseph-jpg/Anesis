@@ -128,9 +128,12 @@ body {
   background: #f9f9f9;
   font-family: Arial, sans-serif;
   box-shadow: rgb(53, 52, 52);
+  flex-wrap: wrap;
+  justify-content: space-between;
 }
 .text {
   flex: 1;
+  min-width: 280px;
 }
 .text h2 {
   font-size: 28px;
@@ -177,10 +180,40 @@ body {
 }
 .mj {
   flex: 1;
+  min-width: 280px;
+  max-width: 350px;
 }
 .mj img {
   width: 100%;
+  height: auto;
+  display: block;
   border-radius: 10px;
+}
+/* Responsive About Us section for mobile phones */
+@media (max-width: 768px) {
+  .look {
+    flex-direction: column;
+    padding: 30px 20px;
+    gap: 30px;
+    align-items: center;
+  }
+  .mj {
+    min-width: 100%;
+    max-width: 100%;
+    order: -1; /* Images appear first on mobile for visual hierarchy */
+  }
+  .text {
+    min-width: 100%;
+  }
+  .text h2 {
+    font-size: 24px;
+  }
+  .text p {
+    font-size: 15px;
+  }
+  .text ul li {
+    font-size: 15px;
+  }
 }
 .lan {
   font-size: 28px;
@@ -338,4 +371,30 @@ footer a:hover {
   60% {
     transform: translateY(-5px);
   }
+}
+
+/* Footer exact icon colors (target by link href so no HTML changes required) */
+footer a[href*="facebook"] i {
+  color: #1877F2;
+}
+footer a[href*="twitter"] i {
+  color: #1DA1F2;
+}
+footer a[href*="instagram"] i {
+  color: #E1306C;
+}
+footer a[href^="mailto:"] i {
+  color: #D44638;
+}
+footer a[href*="linkedin"] i {
+  color: #0A66C2;
+}
+/* handle possible capitalized "Pintrest" typo and common lowercase spelling */
+footer a[href*="Pintrest"] i,
+footer a[href*="pinterest"] i {
+  color: #BD081C;
+}
+
+footer a i {
+  transition: color 0.15s ease;
 }
