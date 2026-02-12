@@ -125,11 +125,12 @@ body {
   align-items: center;
   gap: 40px;
   padding: 50px;
-  background: #f9f9f9;
+  background: #181717;
   font-family: Arial, sans-serif;
   box-shadow: rgb(53, 52, 52);
   flex-wrap: wrap;
   justify-content: space-between;
+  border-radius: 5px;
 }
 .text {
   flex: 1;
@@ -137,12 +138,12 @@ body {
 }
 .text h2 {
   font-size: 28px;
-  color: #333;
+  color: #1bc0dd;
   margin-bottom: 15px;
 }
 .text p {
   font-size: 16px;
-  color: #555;
+  color: #747272;
   margin-bottom: 15px;
   line-height: 1.6;
 }
@@ -154,7 +155,7 @@ body {
 .text ul li {
   font-size: 16px;
   margin-bottom: 8px;
-  color: #333;
+  color: #747272;
   position: relative;
   padding-left: 25px;
 }
@@ -167,7 +168,7 @@ body {
 }
 .text a {
   display: inline-block;
-  background: #0073e6;
+  background: #e6c006;
   color: white;
   padding: 10px 20px;
   border-radius: 5px;
@@ -335,7 +336,7 @@ footer a:hover {
   display: inline-block;
   margin: 0 80px;
   font-size: 20px;
-  color: gold;
+  color: #e8dede;
   text-shadow: #131111;
 }
 @keyframes ticker {
