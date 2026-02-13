@@ -1,6 +1,24 @@
 // script.js for Anesis website
 
 document.addEventListener('DOMContentLoaded', function () {
+  // Scroll detection for hiding navbar on small screens
+  let lastScrollTop = 0;
+  const navbar = document.querySelector('.navbar');
+  
+  window.addEventListener('scroll', function () {
+    const currentScroll = window.pageYOffset || document.documentElement.scrollTop;
+    
+    if (currentScroll > lastScrollTop && currentScroll > 100) {
+      // Scrolling DOWN - hide navbar
+      if (navbar) navbar.classList.add('navbar-hidden');
+    } else {
+      // Scrolling UP or at top - show navbar
+      if (navbar) navbar.classList.remove('navbar-hidden');
+    }
+    
+    lastScrollTop = currentScroll <= 0 ? 0 : currentScroll;
+  });
+
   // Hamburger menu toggle
   const hamburger = document.querySelector('.hamburger');
   const navLinks = document.querySelector('.nav-links');
