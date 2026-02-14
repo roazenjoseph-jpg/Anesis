@@ -3,7 +3,43 @@
 body {
   margin: 0;
   font-family: Arial, sans-serif;
+  overflow-x: hidden;
+  margin: 0;
+  padding: 0;
 }
+
+/* Card-item motion: only the direct children of `.card-item` will move. */
+@keyframes card-float {
+  0%   { transform: translateY(0) translateX(0) rotate(0deg); }
+  25%  { transform: translateY(-6px) translateX(-4px) rotate(-0.35deg); }
+  50%  { transform: translateY(0) translateX(0) rotate(0deg); }
+  75%  { transform: translateY(6px) translateX(4px) rotate(0.35deg); }
+  100% { transform: translateY(0) translateX(0) rotate(0deg); }
+}
+
+/* apply motion to immediate child so `.card-item.in` transform (enter) isn't overridden */
+.card-item > * {
+  animation-name: card-float;
+  animation-duration: var(--card-float-duration, 6s);
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+  transform-origin: center;
+}
+
+/* subtle variation so movement feels spontaneous */
+.card-item:nth-child(3n) > * { animation-duration: 7.4s; animation-delay: 0.2s; }
+.card-item:nth-child(3n+1) > * { animation-duration: 5.8s; animation-delay: -1.2s; }
+.card-item:nth-child(3n+2) > * { animation-duration: 6.6s; animation-delay: -0.6s; }
+
+/* pause motion on hover/focus for accessibility */
+.card-item:hover > *, .card-item:focus-within > * { animation-play-state: paused; }
+
+/* respect user's reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  .card-item > * { animation: none !important; }
+}
+/* make sizing predictable to avoid layout shifts */
+*, *::before, *::after { box-sizing: border-box; }
 .navbar {
   display: flex;
   justify-content: space-between;
@@ -11,6 +47,7 @@ body {
   background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url(n.jpg);
   padding: 5px 10px;
   border-radius: 8px;
+  z-index: 900; /* keep nav above other elements to avoid overlap */
 }
 .logo {
   font-size: 25px;
@@ -33,11 +70,10 @@ body {
   list-style: none;
   background-color: #3b3b39;
   position: relative;
-  padding-top: 0px;
-  top: 0;
-  height: 100%;
+  padding: 0;
   align-items: center;
-  width: 100%;
+  width: auto;
+  margin: 0;
 }
 .nav-links a {
   color: white;
@@ -45,9 +81,9 @@ body {
   transition: 0.3s;
 }
 .nav-links li {
-  padding: 8px;
+  padding: 8px 6px;
   text-decoration: none;
-  margin-top: 25px;
+  margin: 0;
 }
 .nav-links a:hover {
   color: rgb(71, 209, 53);
@@ -104,21 +140,13 @@ body {
     display: flex;
   }
 }
-.description {
-  background-color: #fdfcfc;
-  padding-top: 20px;
-  margin-top: 20px;
-  box-shadow: #b3effa;
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-}
+
 .helo {
   display: flex;
   align-items: center;
   justify-content: flex-start;
   gap: 20px;
+  flex-wrap: wrap; /* prevent children from overflowing horizontally */
 }
 .look {
   display: flex;
@@ -235,7 +263,7 @@ body {
   padding: 25px;
   border-radius: 10px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-  transition: transform 0.3s ease, box-shadoww 0.3s ease;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
   position: relative;
   overflow: hidden;
 }
@@ -326,25 +354,20 @@ footer a:hover {
 .tool {
   position: relative;
   bottom: 0px;
-  animation: ticker 20s linear infinite;
   grid-template-columns: repeat(1, 1fr);
   display: flex;
   text-align: center;
   gap: 40px;
+  overflow: hidden; /* keep animated content from affecting layout */
 }
-.v {
-  min-height: 50vh;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 20px 10%;
-  gap: 10px;
+
+/* inner runner carries the animation so the .tool container stays stable */
+.tool .ticker-runner {
+  display: inline-block;
+  white-space: nowrap;
+  animation: ticker 20s linear infinite;
 }
-.vtn {
-  padding: 12px 28px;
-  background-color: #0073e6;
-  text-decoration: none;
-}
+
 .text-j {
 
   text-align: center;
@@ -356,8 +379,8 @@ footer a:hover {
 }
 .tool p {
   display: inline-block;
-  margin: 0 80px;
-  font-size: 20px;
+  margin: 0 40px;
+  font-size: 18px;
   color: #e8dede;
   text-shadow: #131111;
 }
@@ -422,6 +445,51 @@ footer a i {
   transition: color 0.15s ease;
 }
 
+/* Ensure only `.card-item` elements animate: disable other animations explicitly */
+.tool .ticker-runner,
+.before,
+#flame,
+a[href*="wa.me"] {
+  animation: none !important;
+}
+
+/* inner ad-ticker: slide content right -> left inside each card */
+.card-item .ad-ticker { overflow: hidden; }
+.card-item .ad-ticker .runner {
+  display: inline-block;
+  white-space: nowrap;
+  will-change: transform;
+}
+.card-item .ad-ticker .runner > span { display: inline-block; padding: 0 28px; }
+.card-item:hover .ad-ticker .runner,
+.card-item:focus-within .ad-ticker .runner { animation-play-state: paused; }
+
+/* runtime-controlled spontaneous animation: JS will set CSS variables on the runner
+   and toggle the `.spontaneous` class to (re)start animation with randomized
+   duration, delay and (occasional) reverse direction. */
+.card-item .ad-ticker .runner.spontaneous {
+  animation-name: ad-ticker-scroll;
+  animation-duration: var(--ad-ticker-duration, 8s);
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  animation-delay: var(--ad-ticker-delay, 0s);
+  animation-direction: var(--ad-ticker-direction, normal);
+}
+
+@keyframes ad-ticker-scroll {
+  /* using -50% because the runner's contents are duplicated at runtime for a
+     seamless loop; translate by half the runner width to cycle cleanly. */
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card-item .ad-ticker .runner { animation: none !important; }
+  .card-marquee .marquee-runner { animation: none !important; }
+}
+
+/* Keep transitions (hover effects) intact, only remove keyframe-based animations */
+
 /* Make service cards display two per row on small screens (phones) */
 @media (max-width: 600px) {
   .services {
@@ -434,6 +502,39 @@ footer a i {
     box-sizing: border-box;
     margin: 0;
   }
+}
+/* Mobile-specific responsiveness for card marquee and ad cards */
+/* ensure scroll-buttons hidden by default on larger screens (inline CSS may exist) */
+.card-marquee .scroll-btn { display: none !important; }
+
+@media (max-width: 480px) {
+  /* disable automatic whole-runner marquee so users can swipe */
+  .card-marquee .marquee-runner { animation: none !important; }
+  /* show scroll buttons on phones only */
+  .card-marquee .scroll-btn { display: flex !important; }
+  .card-marquee .marquee-viewport {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x mandatory;
+    padding-bottom: 10px;
+  }
+  .card-marquee .marquee-runner { gap: 12px; }
+  .card-marquee .card-item { width: 86%; scroll-snap-align: start; padding: 6px 0; }
+
+  /* simplify and scale ad-card content for small screens */
+  .v { padding: 12px 8px; }
+  .v .ad-card { flex-direction: column; gap: 10px; padding: 12px; border-radius: 12px; }
+  .v .ad-img { width: 100%; height: 140px; object-fit: cover; }
+  .v .ad-content h2 { font-size: 18px; }
+  .v .ad-content p { font-size: 14px; line-height: 1.38; }
+  .v .vtn { display: block; width: 100%; text-align: center; padding: 12px; }
+  .v .ad-badge { top: 10px; left: 10px; padding: 5px 8px; font-size: 11px; }
+
+  /* make ticker readable but avoid heavy animation on phones */
+  .card-item .ad-ticker .runner.spontaneous { animation-play-state: paused !important; }
+
+  /* reduce floating/idle animations on phones to preserve CPU/battery */
+  .card-item > * { animation: none !important; }
 }
                  
 
