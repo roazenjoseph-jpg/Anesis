@@ -40,8 +40,6 @@
             .v .ad-ticker { position: absolute; left: 0; right: 0; bottom: 0; background: rgba(2,8,23,0.9); color: #fff; padding: 8px 12px; overflow: hidden; }
             .v .ad-ticker .runner { display: inline-block; white-space: nowrap; will-change: transform; }
             .v .ad-ticker .runner > span { display: inline-block; padding: 0 28px; font-weight: 600; letter-spacing: 0.6px; }
-            @keyframes ticker { from { transform: translateX(0%); } to { transform: translateX(-50%); } }
-            .v .ad-ticker .runner { animation: ticker 12s linear infinite; }
 
             /* Responsive */
             @media (max-width: 720px) {
@@ -58,16 +56,22 @@
 
             /* Description marquee: slide cards from right -> left */
             /* `.description` positioned relative (parent container for cards) */
-            .description { position: relative; padding: 18px 12px; }
-            .card-marquee { position: relative; width: 100%; }
-            .card-marquee .marquee-viewport { width: 100%; overflow-x: auto; overflow-y: hidden; -webkit-overflow-scrolling: touch; scroll-behavior: smooth; padding-bottom: 8px; }
-            .card-marquee .marquee-runner { display: flex; gap: 18px; align-items: stretch; }
-            .card-marquee .card-item { flex: 0 0 auto; width: min(360px, 42%); }
+            .description {   position: relative; padding: 18px 12px; width: 100%;}
+            .card-marquee {  position: relative; width: 100%; }
+            .card-marquee .marquee-viewport { width: 100%; overflow: hidden; -webkit-overflow-scrolling: touch; padding-bottom: 8px; }
+            .card-marquee .marquee-runner { display: flex; gap: 18px; align-items: stretch; width: max-content; }
+            /* auto marquee: move whole card sets from right to left */
+            .card-marquee .marquee-runner { animation: marquee var(--marquee-duration, 18s) linear infinite !important; }
+            .card-marquee:hover .marquee-runner { animation-play-state: paused; }
+            @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+            /* hide manual scroll controls when marquee active */
+            .card-marquee .scroll-btn { display: none; }
+            .card-marquee .card-item { flex: 0 0 auto; width: min(360px, 100%); }
 
             /* card entry animation (fade + slide) */
             .card-marquee .card-item { opacity: 0; transform: translateY(14px) scale(0.995); transition: opacity 420ms cubic-bezier(.2,.9,.2,1), transform 420ms cubic-bezier(.2,.9,.2,1); }
             .card-marquee .card-item.in { opacity: 1; transform: translateY(0) scale(1); }
-
+             
             /* Scroll controls */
             .card-marquee .scroll-btn { position: absolute; top: 50%; transform: translateY(-50%); width: 44px; height: 44px; border-radius: 50%; background: rgba(15,23,42,0.75); color: #fff; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 20; border: none; }
             .card-marquee .scroll-btn.left { left: 8px; }
@@ -299,7 +303,7 @@
 
             <script>
                 let currentSlideIndex = 0;
-                const autoPlayInterval = 5000;
+                const autoPlayInterval = 500;
                 let autoPlayTimer;
 
                 // Initialize indicators on page load
@@ -617,6 +621,45 @@
             </section>
 
         <script src="script.js"></script>
-        
+        <script>
+        (function(){
+            if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+            const runners = document.querySelectorAll('.card-item .ad-ticker .runner');
+            if (!runners.length) return;
+            const rand = (min, max) => Math.random() * (max - min) + min;
+
+            runners.forEach(runner => {
+                // duplicate content to make a seamless loop
+                if (!runner.dataset.dup) {
+                    runner.innerHTML = runner.innerHTML + runner.innerHTML;
+                    runner.dataset.dup = '1';
+                }
+
+                function applyRandom() {
+                    const dur = (rand(6, 14)).toFixed(2) + 's'; // 6-14s
+                    const delay = (rand(0, 4)).toFixed(2) + 's'; // small offset
+                    const dir = Math.random() > 0.84 ? 'reverse' : 'normal'; // occasional reverse
+                    runner.style.setProperty('--ad-ticker-duration', dur);
+                    runner.style.setProperty('--ad-ticker-delay', delay);
+                    runner.style.setProperty('--ad-ticker-direction', dir);
+                    // retrigger animation by toggling class
+                    runner.classList.remove('spontaneous');
+                    void runner.offsetWidth;
+                    runner.classList.add('spontaneous');
+                }
+
+                applyRandom();
+                // re-randomize intermittently so movement feels spontaneous
+                const interval = Math.floor(rand(5000, 12000));
+                setInterval(applyRandom, interval);
+
+                // respect hover/focus (pause animation)
+                runner.addEventListener('mouseenter', () => runner.style.setProperty('animation-play-state', 'paused'));
+                runner.addEventListener('mouseleave', () => runner.style.removeProperty('animation-play-state'));
+                runner.addEventListener('focusin', () => runner.style.setProperty('animation-play-state', 'paused'));
+                runner.addEventListener('focusout', () => runner.style.removeProperty('animation-play-state'));
+            });
+        })();
+        </script>
     </body>
 </html>
