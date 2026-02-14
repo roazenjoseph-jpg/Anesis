@@ -6,7 +6,89 @@
         <title>Anesis website</title>
          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
-        <link rel="stylesheet" href="styles.css">
+         <link rel="stylesheet" href="styles.css">
+        <style>
+            /* Advertising card in section .v — graphic-style enhancements */
+            .v { overflow: visible; padding: 28px 18px; display: flex; justify-content: center; background: linear-gradient(90deg,#071826 0%, #0b3b55 100%); }
+            /* customization variables: override these on the .ad-wrapper or via classes */
+            .v .ad-wrapper { --ad-max-width: 980px; --ad-img-width: 260px; --ad-img-height: 160px; width: 100%; max-width: var(--ad-max-width); }
+            .v .ad-card {
+                position: relative;
+                display: flex; align-items: center; gap: 20px;
+                background: linear-gradient(180deg, rgba(255,255,255,0.98) 0%, rgba(250,244,238,0.9) 100%);
+                padding: 16px; border-radius: 14px; box-shadow: 0 18px 40px rgba(3,10,18,0.45);
+                transition: transform 0.36s cubic-bezier(.2,.9,.2,1), box-shadow 0.36s;
+                overflow: hidden; backdrop-filter: blur(6px);
+            }
+            .v .ad-card:hover { transform: translateY(-8px); box-shadow: 0 26px 60px rgba(3,10,18,0.55); }
+            .v .ad-card::before {
+                content: '';
+                position: absolute; right: -60px; top: -60px; width: 240px; height: 240px;
+                background: linear-gradient(135deg, rgba(255,167,38,0.14), rgba(255,90,95,0.06)); transform: rotate(25deg);
+            }
+            .v .ad-img { width: var(--ad-img-width); height: var(--ad-img-height); object-fit: cover; border-radius: 10px; flex: 0 0 var(--ad-img-width); box-shadow: 0 8px 18px rgba(2,6,23,0.28); clip-path: polygon(0 0,100% 0,85% 100%,0% 100%); }
+            .v .ad-content { color: #071826; font-family: 'Segoe UI', Roboto, Arial, sans-serif; }
+            .v .ad-content h2 { margin: 0 0 8px 0; font-size: 26px; letter-spacing: -0.5px; }
+            .v .ad-content p { margin: 0 0 12px 0; color: #22343b; line-height: 1.4; font-size: 15px; }
+            .v .vtn { display: inline-block; background: linear-gradient(90deg,#0f172a,#0b2540); color: #fff; padding: 10px 16px; border-radius: 10px; text-decoration: none; box-shadow: 0 8px 18px rgba(11,22,40,0.35); font-weight: 600; }
+            .v .vtn:active, .v .vtn:focus { transform: translateY(1px); }
+
+            /* Badge */
+            .v .ad-badge { position: absolute; top: 12px; left: 12px; background: #ff5a5f; color: white; padding: 6px 10px; border-radius: 8px; font-size: 12px; font-weight: 700; box-shadow: 0 6px 14px rgba(255,90,95,0.25); text-transform: uppercase; }
+
+            /* Running ticker */
+            .v .ad-ticker { position: absolute; left: 0; right: 0; bottom: 0; background: rgba(2,8,23,0.9); color: #fff; padding: 8px 12px; overflow: hidden; }
+            .v .ad-ticker .runner { display: inline-block; white-space: nowrap; will-change: transform; }
+            .v .ad-ticker .runner > span { display: inline-block; padding: 0 28px; font-weight: 600; letter-spacing: 0.6px; }
+            @keyframes ticker { from { transform: translateX(0%); } to { transform: translateX(-50%); } }
+            .v .ad-ticker .runner { animation: ticker 12s linear infinite; }
+
+            /* Responsive */
+            @media (max-width: 720px) {
+                .v { padding: 18px 10px; }
+                .v .ad-card { flex-direction: column; gap: 12px; padding: 14px; }
+                .v .ad-img { width: 100%; height: 180px; flex: auto; clip-path: none; }
+                .v .ad-content h2 { font-size: 20px; }
+            }
+
+            /* size utility classes (can be added to `.ad-wrapper`) */
+            .v .ad-size-small { --ad-max-width: 420px; --ad-img-width: 140px; --ad-img-height: 94px; }
+            .v .ad-size-medium { --ad-max-width: 760px; --ad-img-width: 200px; --ad-img-height: 120px; }
+            .v .ad-size-large { --ad-max-width: 1200px; --ad-img-width: 340px; --ad-img-height: 200px; }
+
+            /* Description marquee: slide cards from right -> left */
+            /* `.description` positioned relative (parent container for cards) */
+            .description { position: relative; padding: 18px 12px; }
+            .card-marquee { position: relative; width: 100%; }
+            .card-marquee .marquee-viewport { width: 100%; overflow-x: auto; overflow-y: hidden; -webkit-overflow-scrolling: touch; scroll-behavior: smooth; padding-bottom: 8px; }
+            .card-marquee .marquee-runner { display: flex; gap: 18px; align-items: stretch; }
+            .card-marquee .card-item { flex: 0 0 auto; width: min(360px, 42%); }
+
+            /* card entry animation (fade + slide) */
+            .card-marquee .card-item { opacity: 0; transform: translateY(14px) scale(0.995); transition: opacity 420ms cubic-bezier(.2,.9,.2,1), transform 420ms cubic-bezier(.2,.9,.2,1); }
+            .card-marquee .card-item.in { opacity: 1; transform: translateY(0) scale(1); }
+
+            /* Scroll controls */
+            .card-marquee .scroll-btn { position: absolute; top: 50%; transform: translateY(-50%); width: 44px; height: 44px; border-radius: 50%; background: rgba(15,23,42,0.75); color: #fff; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 20; border: none; }
+            .card-marquee .scroll-btn.left { left: 8px; }
+            .card-marquee .scroll-btn.right { right: 8px; }
+            .card-marquee .scroll-btn:hover { background: rgba(15,23,42,0.9); }
+
+            /* scrollbar styling */
+            .card-marquee .marquee-viewport::-webkit-scrollbar { height: 10px; }
+            .card-marquee .marquee-viewport::-webkit-scrollbar-track { background: rgba(0,0,0,0.06); border-radius: 10px; }
+            .card-marquee .marquee-viewport::-webkit-scrollbar-thumb { background: rgba(11,22,40,0.45); border-radius: 10px; }
+
+            /* responsive tweaks for runner items */
+            @media (max-width: 980px) {
+                .card-marquee .card-item { width: min(72%, 320px); }
+            }
+            @media (max-width: 720px) {
+                .card-marquee .card-item { width: 86%; }
+                .card-marquee .marquee-runner { gap: 12px; }
+                .card-marquee .scroll-btn { width: 40px; height: 40px; }
+            }
+        </style>
     
     </head>
     <body>
@@ -42,24 +124,129 @@
         </nav>
         <section class="description">
             <div class="helo">
-                <div class="tool" style=" border-radius: 5px;">
-                    <div class="excellence" style="background-color: #1f4bec; border-radius: 10px; box-shadow: #0f172a;">
-                        <h3>Excellence</h3>
-                        <p>"The difference between ordinary and extraordinary is that little extra."
-                                          -Jimmy Johnson
-                        </p>
-                    </div>
-                        <div class="integrity" style="background: rgb(112, 2, 2); padding: 20px; border-radius: 10px; box-shadow: #0f172a;">
-                            <h3>Integrity</h3>
-                            <p>"Integrity is doing the right thing, even when no one is watching."
-                                               -C.s Lewis
-                            </p>
+                <div class="tool">
+                    <div class="card-marquee" aria-hidden="false">
+                            <button class="scroll-btn left" aria-label="Scroll left">❮</button>
+                            <div class="marquee-viewport">
+                                <div class="marquee-runner">
+                                <!-- set A -->
+                                <div class="card-item">
+                                    <section class="v">
+                                        <div class="ad-wrapper ad-size-medium" data-ad-size="medium">
+                                            <div class="ad-card">
+                                                <div class="ad-badge">Limited</div>
+                                                <img src="dj.jpg.jpg" alt="Ad image" class="ad-img">
+                                                <div class="ad-content">
+                                                    <h2>Special Offer</h2>
+                                                    <p>The difference between ordinary and extraordinary is that little extra. — Jimmy Johnson</p>
+                                                    <a href="#" class="vtn">Visit Store</a>
+                                                </div>
+                                                <div class="ad-ticker" aria-hidden="true">
+                                                    <div class="runner">
+                                                        <span>🔥 SALE — Up to 50% OFF</span>
+                                                        <span>Free delivery • 24/7 Support</span>
+                                                        <span>Limited stock — Shop now</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </section>
+                                </div>
+                                <div class="card-item">
+                                    <section class="v">                               
+                                         <div class="ad-wrapper ad-size-medium" data-ad-size="medium">
+                                            <div class="ad-card">
+                                                <div class="ad-badge">Limited</div>
+                                                <img src="m.jpg" alt="Ad image" class="ad-img">
+                                                <div class="ad-content">
+                                                    <h2>Special Offer</h2>
+                                                    <p>The difference between ordinary and extraordinary is that little extra. — Jimmy Johnson</p>
+                                                    <a href="#" class="vtn">Visit Store</a>
+                                                </div>
+                                                <div class="ad-ticker" aria-hidden="true">
+                                                    <div class="runner">
+                                                        <span>🔥 SALE — Up to 50% OFF</span>
+                                                        <span>Free delivery • 24/7 Support</span>
+                                                        <span>Limited stock — Shop now</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                            </section>
+                                </div>
+                             <div class="card-item">
+                                <section class="v">                               
+                                         <div class="ad-wrapper ad-size-medium" data-ad-size="medium">
+                                            <div class="ad-card">
+                                                <div class="ad-badge">Limited</div>
+                                                <img src="m.jpg" alt="Ad image" class="ad-img">
+                                                <div class="ad-content">
+                                                    <h2>Special Offer</h2>
+                                                    <p>The difference between ordinary and extraordinary is that little extra. — Jimmy Johnson</p>
+                                                    <a href="#" class="vtn">Visit Store</a>
+                                                </div>
+                                                <div class="ad-ticker" aria-hidden="true">
+                                                    <div class="runner">
+                                                        <span>🔥 SALE — Up to 50% OFF</span>
+                                                        <span>Free delivery • 24/7 Support</span>
+                                                        <span>Limited stock — Shop now</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                            </section>
+                             </div>
+
+
+                                <!-- set B (duplicate) -->
+                                <div class="card-item">
+                                    <section class="v">
+                                        <div class="ad-wrapper ad-size-medium" data-ad-size="medium">
+                                            <div class="ad-card">
+                                                <div class="ad-badge">Limited</div>
+                                                <img src="dj.jpg.jpg" alt="Ad image" class="ad-img">
+                                                <div class="ad-content">
+                                                    <h2>Special Offer</h2>
+                                                    <p>The difference between ordinary and extraordinary is that little extra. — Jimmy Johnson</p>
+                                                    <a href="#" class="vtn">Visit Store</a>
+                                                </div>
+                                                <div class="ad-ticker" aria-hidden="true">
+                                                    <div class="runner">
+                                                        <span>🔥 SALE — Up to 50% OFF</span>
+                                                        <span>Free delivery • 24/7 Support</span>
+                                                        <span>Limited stock — Shop now</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </section>
+                                </div>
+                                <div class="card-item"> 
+                                <section class="v">                               
+                                         <div class="ad-wrapper ad-size-medium" data-ad-size="medium">
+                                            <div class="ad-card">
+                                                <div class="ad-badge">Limited</div>
+                                                <img src="m.jpg" alt="Ad image" class="ad-img">
+                                                <div class="ad-content">
+                                                    <h2>Special Offer</h2>
+                                                    <p>The difference between ordinary and extraordinary is that little extra. — Jimmy Johnson</p>
+                                                    <a href="#" class="vtn">Visit Store</a>
+                                                </div>
+                                                <div class="ad-ticker" aria-hidden="true">
+                                                    <div class="runner">
+                                                        <span>🔥 SALE — Up to 50% OFF</span>
+                                                        <span>Free delivery • 24/7 Support</span>
+                                                        <span>Limited stock — Shop now</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                            </section>
+                            </div>
+                            </div>
                         </div>
-                            <div class="work" style="background: rgb(71, 69, 69); border-radius: 10px; box-shadow: #0f172a;">
-                                <h3>Team work</h3>
-                                <p>"Talent wins games, but teamwork and intelligence win championships."
-                                                 -Micheal Jordan
-                                </p>
+                        <button class="scroll-btn right" aria-label="Scroll right">❯</button>
+                    </div>
                 </div>
             </div>
         </section>
@@ -216,11 +403,69 @@
                 initializeIndicators();
                 autoPlayTimer = setInterval(autoPlay, autoPlayInterval);
             </script>
+            <script>
+                // Scroll controls for .description marquee
+                (function(){
+                    const marquee = document.querySelector('.card-marquee');
+                    if (!marquee) return;
+                    const viewport = marquee.querySelector('.marquee-viewport');
+                    const leftBtn = marquee.querySelector('.scroll-btn.left');
+                    const rightBtn = marquee.querySelector('.scroll-btn.right');
+
+                    const scrollByAmount = () => Math.max(viewport.clientWidth * 0.6, 260);
+
+                    leftBtn.addEventListener('click', () => {
+                        viewport.scrollBy({ left: -scrollByAmount(), behavior: 'smooth' });
+                    });
+                    rightBtn.addEventListener('click', () => {
+                        viewport.scrollBy({ left: scrollByAmount(), behavior: 'smooth' });
+                    });
+
+                    // show/hide controls depending on overflow
+                    function updateControls(){
+                        if (viewport.scrollWidth <= viewport.clientWidth + 2) { leftBtn.style.display = 'none'; rightBtn.style.display = 'none'; }
+                        else { leftBtn.style.display = ''; rightBtn.style.display = ''; }
+                    }
+                    window.addEventListener('resize', updateControls);
+                    updateControls();
+
+                    // pointer drag to scroll
+                    let isDown = false, startX, startScroll;
+                    viewport.addEventListener('pointerdown', (e) => {
+                        isDown = true; startX = e.clientX; startScroll = viewport.scrollLeft; viewport.setPointerCapture(e.pointerId);
+                    });
+                    viewport.addEventListener('pointermove', (e) => {
+                        if (!isDown) return; const dx = startX - e.clientX; viewport.scrollLeft = startScroll + dx;
+                    });
+                    ['pointerup','pointercancel','pointerleave'].forEach(evt => viewport.addEventListener(evt, () => { isDown = false; }));
+                })();
+            </script>
+                <script>
+                    // Animate card-items when they enter the viewport (staggered)
+                    (function(){
+                        const items = document.querySelectorAll('.card-marquee .card-item');
+                        if (!items.length) return;
+
+                        const observer = new IntersectionObserver((entries) => {
+                            entries.forEach(entry => {
+                                if (entry.isIntersecting) {
+                                    const el = entry.target;
+                                    const idx = Array.prototype.indexOf.call(items, el);
+                                    // stagger based on index
+                                    setTimeout(() => el.classList.add('in'), idx * 120);
+                                    observer.unobserve(el);
+                                }
+                            });
+                        }, { threshold: 0.15 });
+
+                        items.forEach(it => observer.observe(it));
+                    })();
+                </script>
         </section>
                             <section>
                                 <div class="text">
                                       <h2 style="text-align:center;">Anesis Air Solutions</h2>
-                                    <p>
+                                    <p style="color: #747272;" >
                                         Anesis Air Solutions is a trusted provider of innovation and reliable air conditioning, ventilation, and cooling solutions. We specialize in the installation, repair, and maintenance of both residential and commercial air systems, ensuring comfort, efficiency, and clean air for every environment.
                                     </p>
                                 </div>
