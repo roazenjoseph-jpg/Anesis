@@ -259,19 +259,19 @@
             <div class="carousel-container" style="position: relative; max-width: 800px; margin: 0 auto; overflow: hidden; border-radius: 15px; box-shadow: 0 8px 20px rgba(0,0,0,0.15);">
                 <!-- Carousel Slides -->
                 <div class="carousel-wrapper" style="position: relative; width: 100%; height: 400px; background: #000;">
-                    <div class="carousel-slide" style="display: flex; position: absolute; width: 100%; height: 100%; top: 0; left: 0; opacity: 0; transition: opacity 0.6s ease-in-out; align-items: center; justify-content: center;">
+                    <div class="carousel-slide" style="display: flex; position: absolute; width: 100%; height: 100%; top: 0; left: 0; opacity: 0; transition: opacity 1.2s ease-in-out; align-items: center; justify-content: center;">
                         <img src="f.jpg.jpg" style="width: 100%; height: 100%; object-fit: cover; cursor: pointer;" onclick="openModal(this.src)">
                     </div>
-                    <div class="carousel-slide" style="display: flex; position: absolute; width: 100%; height: 100%; top: 0; left: 0; opacity: 1; transition: opacity 0.6s ease-in-out; align-items: center; justify-content: center;">
+                    <div class="carousel-slide" style="display: flex; position: absolute; width: 100%; height: 100%; top: 0; left: 0; opacity: 1; transition: opacity 1.2s ease-in-out; align-items: center; justify-content: center;">
                         <img src="ty.jpg__.jpg" style="width: 100%; height: 100%; object-fit: cover; cursor: pointer;" onclick="openModal(this.src)">
                     </div>
-                    <div class="carousel-slide" style="display: flex; position: absolute; width: 100%; height: 100%; top: 0; left: 0; opacity: 0; transition: opacity 0.6s ease-in-out; align-items: center; justify-content: center;">
+                    <div class="carousel-slide" style="display: flex; position: absolute; width: 100%; height: 100%; top: 0; left: 0; opacity: 0; transition: opacity 1.2s ease-in-out; align-items: center; justify-content: center;">
                         <img src="a.jpg.jpg" style="width: 100%; height: 100%; object-fit: cover; cursor: pointer;" onclick="openModal(this.src)">
                     </div>
-                    <div class="carousel-slide" style="display: flex; position: absolute; width: 100%; height: 100%; top: 0; left: 0; opacity: 0; transition: opacity 0.6s ease-in-out; align-items: center; justify-content: center;">
+                    <div class="carousel-slide" style="display: flex; position: absolute; width: 100%; height: 100%; top: 0; left: 0; opacity: 0; transition: opacity 1.2s ease-in-out; align-items: center; justify-content: center;">
                         <img src="z.jpg.jpg" style="width: 100%; height: 100%; object-fit: cover; cursor: pointer;" onclick="openModal(this.src)">
                     </div>
-                    <div class="carousel-slide" style="display: flex; position: absolute; width: 100%; height: 100%; top: 0; left: 0; opacity: 0; transition: opacity 0.6s ease-in-out; align-items: center; justify-content: center;">
+                    <div class="carousel-slide" style="display: flex; position: absolute; width: 100%; height: 100%; top: 0; left: 0; opacity: 0; transition: opacity 1.2s ease-in-out; align-items: center; justify-content: center;">
                         <img src="s.jpg.jpg" style="width: 100%; height: 100%; object-fit: cover; cursor: pointer;" onclick="openModal(this.src)">
                     </div>
 
@@ -303,7 +303,7 @@
 
             <script>
                 let currentSlideIndex = 0;
-                const autoPlayInterval = 500;
+                const autoPlayInterval = 4000;
                 let autoPlayTimer;
 
                 // Initialize indicators on page load
@@ -320,7 +320,7 @@
                         indicator.style.height = '12px';
                         indicator.style.borderRadius = '50%';
                         indicator.style.cursor = 'pointer';
-                        indicator.style.transition = 'background 0.3s';
+                        indicator.style.transition = 'background 5s';
                         indicator.style.background = index === 0 ? 'white' : 'rgba(255,255,255,0.5)';
                         indicator.onclick = () => currentSlide(index);
                         indicatorsContainer.appendChild(indicator);
