@@ -117,7 +117,7 @@ body {
     position: absolute;
     top: 37px;
     left: 0;
-    background: rgb(56, 55, 53);
+    background: none;
     flex-direction: column;
     width: 100%;
     display: none;
