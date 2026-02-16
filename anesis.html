@@ -619,9 +619,9 @@
         </div>
         <div class="const">
         <div style="margin-bottom: 30px;">
-            <p style="font-size: 16px; color: #333;"><strong>Phone:</strong>+256 700 000 000</p>
-            <p style="font-size: 16px; color: #333;"><strong>Email:</strong>info@anesisairsolutions.com</p>
-            <p style="font-size: 16px; color: #333;"><strong>Address:</strong>Kampala, Uganda</p>
+            <p style="font-size: 16px; color: #747272;"><strong>Phone:</strong>+256 780 644 224</p>
+            <p style="font-size: 16px; color: #747272;"><strong>Email:</strong>info@anesisairsolutions.com</p>
+            <p style="font-size: 16px; color: #747272;"><strong>Address:</strong>Kampala, Uganda</p>
         </div>
         </div>
         <div class="const" style="background: rgb(197, 14, 14);">
@@ -649,7 +649,7 @@
            </section>
            </div>
            <section>
-                                    <a href="https://wa.me/256751239432" target="_blank"
+                                    <a href="https://wa.me/256780644224" target="_blank"
                                      style="position: fixed; bottom: 20px; right: 20px; background: #25D366; 
                                      width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; 
                                      justify-content: center; box-shadow: 0 4px 8px rgba(0,0,0,0.3);
@@ -709,6 +709,11 @@
                     bookMenu.setAttribute('aria-hidden', (!isOpen).toString());
                     hamburger.setAttribute('aria-expanded', isOpen.toString());
                     document.body.style.overflow = isOpen ? 'hidden' : '';
+                    // explicitly hide legacy/top nav when opening book
+                    const topNav = document.querySelector('.nav-links');
+                    if (topNav) topNav.style.display = isOpen ? 'none' : '';
+                    // remove any open-menu classes used by previous menu implementations
+                    document.querySelectorAll('.nav-open, .menu-open, .old-nav-open').forEach(n => n.classList.remove('nav-open','menu-open','old-nav-open'));
                     if (isOpen) {
                         const first = bookMenu.querySelector('.book-nav a');
                         setTimeout(() => first && first.focus(), 520);
@@ -724,6 +729,21 @@
                     document.querySelectorAll('.modal, .popup, .open-popup').forEach(el => {
                         try { el.style.display = 'none'; el.classList.remove('open'); } catch(e){}
                     });
+                }
+
+                function hidePreviousNavPermanently(){
+                    const topNav = document.querySelector('.nav-links');
+                    if (topNav) topNav.style.display = 'none';
+                    document.body.dataset.prevNavHidden = '1';
+                    // remove legacy menu classes too
+                    document.querySelectorAll('.nav-open, .menu-open, .old-nav-open').forEach(n => n.classList.remove('nav-open','menu-open','old-nav-open'));
+                    // hide any legacy/old hamburger toggles while keeping the new .hamburger functional
+                    const legacySelectors = ['.hamburger-old', '.old-hamburger', '.menu-toggle', '.toggle-hamburger'];
+                    legacySelectors.forEach(sel => {
+                        document.querySelectorAll(sel).forEach(el => el.style.display = 'none');
+                    });
+                    // also hide any hamburger elements that are not the current one
+                    document.querySelectorAll('.hamburger').forEach(el => { if (el !== document.querySelector('.hamburger')) el.style.display = 'none'; });
                 }
 
                 hamburger.addEventListener('click', () => { closeOtherPopups(); toggleBook(); });
@@ -742,6 +762,8 @@
                 menuLinks.forEach(link => {
                     link.addEventListener('click', (ev) => {
                         closeOtherPopups();
+                        // hide previous/top nav so it does not reappear after click
+                        hidePreviousNavPermanently();
                         const href = link.getAttribute('href') || '';
                         // if it's an in-page anchor allow the browser to jump then close shortly after
                         if (href.startsWith('#')) setTimeout(() => toggleBook(false), 40);
