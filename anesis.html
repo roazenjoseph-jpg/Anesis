@@ -6,7 +6,18 @@
         <title>Anesis website</title>
          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
-         <link rel="stylesheet" href="styles.css">
+         <link rel="stylesheet" href="styles.css"><script type="text/javascript"
+        src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js">
+</script>
+<script type="text/javascript">
+   (function(){
+      emailjs.init({
+        publicKey: "Bl-wzUgDA6GHglUhz"
+      });
+   })();
+</script>
+ 
+
         <style>
             /* Advertising card in section .v — graphic-style enhancements */
             .v { overflow: visible; padding: 28px 18px; display: flex; justify-content: center; background: linear-gradient(90deg,#071826 0%, #0b3b55 100%); }
@@ -626,7 +637,7 @@
         </div>
         <div class="const" style="background: rgb(197, 14, 14);">
         <section id="contact" style="padding: 50px; background:  #0f172a; font-family: Arial, sans-serif;">
-    <form id="contact-form" action="https://formspree.io/f/mrbylpan" method="POST"
+    <form id="contact-form" action="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js" method="POST"
           style="display: grid; gap: 15px; max-width: 600px; margin: auto; text-align: left;">
           <input type="text" name="name" placeholder="Your Name" required 
           style="padding: 12px; border: 1px solid #ccc;
@@ -640,7 +651,7 @@
 
            <button type="submit"
                style="padding: 14px; background: #ec760e; color: white; font-size: 16px; 
-               border: none; border-radius: 8px; cursor: pointer; transition: 0.3s;">Send Message</button>
+               border: none; border-radius: 8px; cursor: pointer; transition: 0.3s;" onclick="sendMail()">Send Message</button>
         </form>
                      <div id="success-message" style="display: none; margin-top: 20px; padding: 16px; border-radius: 8px; background: #e6ffed; color: #256029; font-size: 16px; border: 1px solid #b7eb8f; box-shadow: 0 2px 8px rgba(0,0,0,0.05); text-align: center;">
                          <i class="fa fa-check-circle" style="color: #52c41a; margin-right: 8px;"></i>
