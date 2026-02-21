@@ -50,3 +50,18 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 });
+      function sendMail(){
+        function sendMail(){
+          let parms = {
+            name: document.getElementById("name").value,
+            email: document.getElementById("email").value,
+            subject: document.getElementById("subject").value,
+            message: document.getElementById("message").value
+          }
+          emailjs.send("service_lp7jghv", "template_s5n1f0w", parms)
+            .then(function(response) {
+              alert("✅ Thank you! Your message has been sent. We'll get back to you soon.");
+            }, function(error) {
+              alert("❌ An error occurred while sending your message.");
+            });
+        }}
