@@ -55,8 +55,7 @@ document.addEventListener('DOMContentLoaded', function () {
           let parms = {
             name: document.getElementById("name").value,
             email: document.getElementById("email").value,
-            subject: document.getElementById("subject").value,
-            message: document.getElementById("message").value
+            subject: document.getElementById("subject").value
           }
           emailjs.send("service_lp7jghv", "template_s5n1f0w", parms)
             .then(function(response) {
