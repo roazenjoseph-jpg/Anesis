@@ -64,4 +64,4 @@ document.addEventListener('DOMContentLoaded', function () {
             }, function(error) {
               alert("❌ An error occurred while sending your message.");
             });
-        }}
+        }};
