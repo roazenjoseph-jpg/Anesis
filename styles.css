@@ -6,6 +6,7 @@ body {
   overflow-x: hidden;
   margin: 0;
   padding: 0;
+  padding-top: 60px;
 }
 
 /* Card-item motion: only the direct children of `.card-item` will move. */
@@ -41,12 +42,15 @@ body {
 /* make sizing predictable to avoid layout shifts */
 *, *::before, *::after { box-sizing: border-box; }
 .navbar {
+  position: fixed;
+  top: 0;
+  width: 100%;
   display: flex;
   justify-content: space-between;
   align-items: center;
   background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url(n.jpg);
   padding: 12px 24px;
-  border-radius: 8px;
+  border-radius: 0;
   z-index: 900; /* keep nav above other elements to avoid overlap */
 }
 .logo {
