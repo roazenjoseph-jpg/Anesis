@@ -124,7 +124,8 @@
             body.book-open .book.right .cover { transform: rotateY(160deg); transition: transform 900ms cubic-bezier(.2,.9,.22,1); }
             body.book-open .book-menu { display: flex; }
 
-            /* hamburger morph */
+            /* hamburger morph - transform to x with orange color */
+            body.book-open .hamburger .bar { background: orange; }
             body.book-open .hamburger .bar:nth-child(1) { transform: translateY(10px) rotate(45deg); }
             body.book-open .hamburger .bar:nth-child(2) { opacity: 0; }
             body.book-open .hamburger .bar:nth-child(3) { transform: translateY(-10px) rotate(-45deg); }
