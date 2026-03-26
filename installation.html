@@ -29,6 +29,53 @@
              margin: 0;
              font-family: Arial, sans-serif;
             }
+
+            /* Book-style hamburger menu (from anesis.html) */
+            .hamburger { display: none; width: 44px; height: 38px; position: relative; z-index: 1200; cursor: pointer; }
+            .hamburger .bar { height: 4px; background: #fff; margin: 6px 0; border-radius: 3px; transition: transform 260ms ease, opacity 200ms ease; }
+
+            .navbar { position: fixed; top: 0; width: 100%; z-index: 1000; }
+
+            .book-menu { position: fixed; inset: 0; display: none; align-items: center; justify-content: center; background: rgba(2,6,23,0.6); z-index: 1100; }
+            .book-menu.open { display: flex; }
+            .book-scene { width: min(760px, 92%); max-width: 920px; height: min(520px, 84vh); perspective: 1800px; position: relative; }
+
+            .book { position: absolute; top: 0; bottom: 0; width: 50%; transform-style: preserve-3d; }
+            .book.left { left: 0; transform-origin: left center; }
+            .book.right { right: 0; transform-origin: right center; }
+
+            .cover { position: absolute; inset: 0; background: linear-gradient(180deg,#2b3a4a,#15202b); box-shadow: 0 18px 40px rgba(1,6,12,0.6); border-radius: 6px; transform-origin: left center; backface-visibility: hidden; }
+            .right .cover { transform-origin: right center; }
+
+            .pages { position: absolute; inset: 6% 6%; background: linear-gradient(180deg,#fff,#f9f9f9); border-radius: 4px; box-shadow: inset 0 2px 8px rgba(0,0,0,0.06); overflow: auto; padding: 32px; display: flex; align-items: center; justify-content: center; }
+            .book-nav { display: flex; flex-direction: column; gap: 16px; font-size: 20px; }
+            .book-nav a { color: #0f172a; text-decoration: none; background: transparent; padding: 8px 12px; border-radius: 6px; transition: background 180ms ease; }
+            .book-nav a:hover, .book-nav a:focus { background: rgba(11,22,40,0.06); outline: none; }
+
+            /* closed state (covers meet in middle) */
+            .book.left .cover { transform: rotateY(0deg); }
+            .book.right .cover { transform: rotateY(0deg); }
+
+            /* open state toggle */
+            body.book-open .book.left .cover { transform: rotateY(-160deg); transition: transform 900ms cubic-bezier(.2,.9,.22,1); }
+            body.book-open .book.right .cover { transform: rotateY(160deg); transition: transform 900ms cubic-bezier(.2,.9,.22,1); }
+            body.book-open .book-menu { display: flex; }
+
+            /* hamburger morph - transform to x with orange color */
+            body.book-open .hamburger .bar { background: orange; }
+            body.book-open .hamburger .bar:nth-child(1) { transform: translateY(10px) rotate(45deg); }
+            body.book-open .hamburger .bar:nth-child(2) { opacity: 0; }
+            body.book-open .hamburger .bar:nth-child(3) { transform: translateY(-10px) rotate(-45deg); }
+
+            /* logo shown on the book page background */
+            .book-logo { display: block; max-width: 72%; max-height: 72%; width: auto; height: auto; margin: auto; opacity: 0.98; object-fit: contain; filter: drop-shadow(0 8px 18px rgba(2,8,23,0.45)); }
+            .book .pages { display: flex; align-items: center; justify-content: center; }
+
+            @media (max-width: 640px) {
+                .hamburger { display: block; }
+                .nav-links { display: none; }
+            }
+
             /* Navbar container */
             .navbar {
                 display: flex;
@@ -81,37 +128,6 @@
             .nav-links a:hover {
                 color: rgb(71, 209, 53);
             }
-            /* Hamburger icon */
-            .hamburger {
-                width: 30px;
-                cursor: pointer;
-                position: relative;
-                flex-direction: column;
-                justify-content: space-between;
-                display: none;
-                transition: opacity 0.3s;
-            }
-            .hamburger.hide {
-                opacity: 0;
-                pointer-events: none;
-            }
-
-            .bar {
-                width: 25px;
-                height: 3px;
-                background: white;
-                margin: 4px 0;
-                transition: all 0.3s ease;
-            }
-                 .hamburger.active div:nth-child(1) {
-                    transform: rotate(45deg) translate(9px, 9px);
-                }
-                .hamburger.active div:nth-child(2) {
-                    opacity: 0;
-                }
-                .hamburger.active div:nth-child(3) {
-                    transform: rotate(-45deg) translate(6px, -6px);
-                }
             /* Mobile styles */
             @media (max-width: 768px) {
                 .nav-links {
@@ -129,7 +145,7 @@
                         text-align: center;    
                 }
                 .bar {
-                    transition: ✗;
+                    transition: 0.3s;
                 }
                 .helo img {
                     width: 100%;
@@ -221,18 +237,32 @@
                 <li><a href="anesis.html#contact">Contact</a></li>
                 
             </ul>
-            <div class="hamburger" onclick="toggleMenu()">
+            <div class="hamburger">
                 <div class="bar"></div>
                 <div class="bar"></div>
                 <div class="bar"></div>
             </div>
-            <div class="contrast-icon" style="position: absolute; top: 10px; right: 50px; cursor: pointer;">
-                                <i class="fas fa-adjust" title="Adjust Contrast" style="font-size: 24px; color: #fff;"></i>
-                                <div id="contrast-dropdown" style="display:none; position:absolute; top:30px; right:0; background:#222; color:#fff; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.15); min-width:220px; z-index:1001; padding:16px;">
-                                    <strong>Contrast Control</strong>
-                                    <p style="font-size:14px; margin:8px 0 12px 0;">High contrast mode improves readability for visually impaired users by increasing color separation and brightness.</p>
-                                      <button id="toggle-contrast" style="padding:8px 16px; background:#0073e6; color:#fff; border:none; border-radius:6px; cursor:pointer; font-weight:bold;">Toggle High Contrast</button>
-                                </div>
+            <!-- book-style menu (opens like a chapter) -->
+            <div class="book-menu" id="bookMenu" aria-hidden="true">
+                <div class="book-scene" role="dialog" aria-label="Site navigation">
+                    <div class="book left" aria-hidden="true">
+                        <div class="cover left-cover"></div>
+                        <div class="pages left-pages">
+                            <img src="new.png" alt="Anesis logo" class="book-logo" aria-hidden="false">
+                        </div>
+                    </div>
+                    <div class="book right">
+                        <div class="cover right-cover"></div>
+                        <div class="pages right-pages">
+                            <nav class="book-nav" aria-label="Main menu">
+                                <a href="anesis.html">Home</a>
+                                <a href="anesis.html#about">About</a>
+                                <a href="anesis.html#services">Services</a>
+                                <a href="anesis.html#contact">Contact</a>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
             </div>
                 
         </nav>
@@ -318,71 +348,75 @@
             </section>
 
         <script>
-            // Dropdown for contrast info
-            document.addEventListener('DOMContentLoaded', function () {
-                var contrastIcon = document.querySelector('.contrast-icon');
-                var dropdown = document.getElementById('contrast-dropdown');
-                var toggleBtn = document.getElementById('toggle-contrast');
-                contrastIcon.addEventListener('click', function (e) {
-                    e.stopPropagation();
-                    dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
-                });
-                toggleBtn.addEventListener('click', function (e) {
-                    e.stopPropagation();
-                    document.body.classList.toggle('high-contrast');
-                });
-                document.body.addEventListener('click', function () {
-                    dropdown.style.display = 'none';
-                });
-                dropdown.addEventListener('mouseleave', function () {
-                    dropdown.style.display = 'none';
-                });
-            });
-                                     function toggleMenu() {
-                                            var navLinks = document.querySelector('.nav-links');
-                                            var hamburger = document.querySelector('.hamburger');
-                                            navLinks.classList.toggle('active');
-                                            hamburger.classList.toggle('active');
-                                            if (navLinks.classList.contains('active')) {
-                                                hamburger.classList.add('hide');
-                                            } else {
-                                                hamburger.classList.remove('hide');
-                                            }
-                                    }
+            // Book-style menu functionality (from anesis.html)
+            (function(){
+                const hamburger = document.querySelector('.hamburger');
+                const bookMenu = document.getElementById('bookMenu');
+                if (!hamburger || !bookMenu) return;
+                hamburger.setAttribute('role','button');
+                hamburger.setAttribute('tabindex','0');
+                hamburger.setAttribute('aria-expanded','false');
 
-                                    // Hide nav links after clicking a link
-                                    document.addEventListener('DOMContentLoaded', function () {
-                                        var navLinks = document.querySelector('.nav-links');
-                                        var hamburger = document.querySelector('.hamburger');
-                                        if (navLinks) {
-                                            navLinks.addEventListener('click', function (e) {
-                                                if (e.target.tagName === 'A') {
-                                                    navLinks.classList.remove('active');
-                                                    hamburger.classList.remove('active');
-                                                    hamburger.classList.remove('hide');
-                                                }
-                                            });
-                                            // Hide nav links when mouse leaves nav-links area
-                                            navLinks.addEventListener('mouseleave', function () {
-                                                navLinks.classList.remove('active');
-                                                hamburger.classList.remove('active');
-                                                hamburger.classList.remove('hide');
-                                            });
-                                        }
-                                    });
+                function toggleBook(open){
+                    const isOpen = typeof open === 'boolean' ? open : !document.body.classList.contains('book-open');
+                    document.body.classList.toggle('book-open', isOpen);
+                    bookMenu.classList.toggle('open', isOpen);
+                    bookMenu.setAttribute('aria-hidden', (!isOpen).toString());
+                    hamburger.setAttribute('aria-expanded', isOpen.toString());
+                    document.body.style.overflow = isOpen ? 'hidden' : '';
+                    // explicitly hide legacy/top nav when opening book
+                    const topNav = document.querySelector('.nav-links');
+                    if (topNav) topNav.style.display = isOpen ? 'none' : '';
+                    // remove any open-menu classes used by previous menu implementations
+                    document.querySelectorAll('.nav-open, .menu-open, .old-nav-open').forEach(n => n.classList.remove('nav-open','menu-open','old-nav-open'));
+                    if (isOpen) {
+                        const first = bookMenu.querySelector('.book-nav a');
+                        setTimeout(() => first && first.focus(), 520);
+                    }
+                }
+                
+                // ensure other legacy/popups are closed
+                function closeOtherPopups(){
+                    document.querySelectorAll('.modal, .popup, .open-popup').forEach(el => {
+                        try { el.style.display = 'none'; el.classList.remove('open'); } catch(e){}
+                    });
+                }
 
-                                    function showAlert(e) {
-                                        e.preventDefault();
-                                        alert("Gallery still under development. Click Ok to continue!");
-                                    }
+                function hidePreviousNavPermanently(){
+                    const topNav = document.querySelector('.nav-links');
+                    if (topNav) topNav.style.display = 'none';
+                    document.body.dataset.prevNavHidden = '1';
+                    document.querySelectorAll('.nav-open, .menu-open, .old-nav-open').forEach(n => n.classList.remove('nav-open','menu-open','old-nav-open'));
+                }
 
-                                    // Contrast toggle functionality
-                                    document.addEventListener('DOMContentLoaded', function () {
-                                        var contrastIcon = document.querySelector('.contrast-icon');
-                                        contrastIcon.addEventListener('click', function () {
-                                            document.body.classList.toggle('high-contrast');
-                                        });
-                                    });
+                hamburger.addEventListener('click', () => { closeOtherPopups(); toggleBook(); });
+                hamburger.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggleBook(); } });
+
+                // close when clicking outside the pages
+                bookMenu.addEventListener('click', (e) => {
+                    if (e.target === bookMenu) toggleBook(false);
+                });
+
+                // close on Escape
+                document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && document.body.classList.contains('book-open')) toggleBook(false); });
+
+                // close the book menu after clicking a menu item
+                const menuLinks = bookMenu.querySelectorAll('.book-nav a');
+                menuLinks.forEach(link => {
+                    link.addEventListener('click', (ev) => {
+                        closeOtherPopups();
+                        hidePreviousNavPermanently();
+                        const href = link.getAttribute('href') || '';
+                        if (href.startsWith('#')) setTimeout(() => toggleBook(false), 40);
+                        else toggleBook(false);
+                    });
+                });
+            })();
+
+            function showAlert(e) {
+                e.preventDefault();
+                alert("Gallery still under development. Click Ok to continue!");
+            }
         </script>
             </body>
             </html>
