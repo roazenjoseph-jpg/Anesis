@@ -1,6 +1,51 @@
 // script.js for Anesis website
 
+/**
+ * Refined Scroll Reveal Observer
+ * Adds visibility animations to sections as they enter the viewport
+ */
+function initScrollReveal() {
+  const revealOptions = {
+    threshold: 0.15,
+    rootMargin: '0px 0px -50px 0px'
+  };
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, revealOptions);
+
+  const revealTargets = document.querySelectorAll('.look, .clean, .text h2');
+  
+  revealTargets.forEach(target => {
+    target.style.opacity = '0';
+    target.style.transform = 'translateY(30px)';
+    target.style.transition = 'opacity 0.8s ease-out, transform 0.8s cubic-bezier(0.165, 0.84, 0.44, 1)';
+    observer.observe(target);
+  });
+
+  const style = document.createElement('style');
+  style.textContent = `
+    .visible { 
+      opacity: 1 !important; 
+      transform: translateY(0) !important; 
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .service-card, .look, .clean, .text h2 {
+        opacity: 1 !important; transform: none !important; transition: none !important;
+      }
+    }
+  `;
+  document.head.appendChild(style);
+}
+
 document.addEventListener('DOMContentLoaded', function () {
+  initScrollReveal();
+
   // Hamburger menu toggle
   const hamburger = document.querySelector('.hamburger');
   const navLinks = document.querySelector('.nav-links');
@@ -34,87 +79,35 @@ document.addEventListener('DOMContentLoaded', function () {
   const button = document.getElementById('button');
   const form = document.getElementById('contact-form');
   const successMsg = document.getElementById('success-message');
-  if (form && successMsg) {
-    form.addEventListener('submit',  function (event) {
+  if (form && successMsg && button) {
+    form.addEventListener('submit', async function (event) {
       event.preventDefault();
+      
+      const originalText = button.textContent;
+      button.textContent = "Sending...";
+      button.disabled = true;
+
       const formdata = new FormData(form);
-      const response =  fetch(form.action, {
-        method: form.method,
-        headers: { 'Accept': 'application/json' }
-      });
-      if (response.ok) {
-        form.reset();
-        successMsg.style.display = 'block';
-      } else {
-        alert("✅ Thank you! Your message has been sent. We'll get back to you soon.");
+      try {
+        const response = await fetch(form.action, {
+          method: form.method,
+          headers: { 'Accept': 'application/json' },
+          body: formdata
+        });
+        
+        if (response.ok) {
+          form.reset();
+          successMsg.style.display = 'block';
+        } else {
+          const data = await response.json();
+          alert("Error: " + (data.message || "Something went wrong."));
+        }
+      } catch (error) {
+        alert("Something went wrong. Please try again.");
+      } finally {
+        button.textContent = originalText;
+        button.disabled = false;
       }
     });
   }
 });
-      function sendMail(){
-        async function sendMail(){
-          let parms = {
-            name: document.getElementById("name").value,
-            email: document.getElementById("email").value,
-            subject: document.getElementById("subject").value
-          }
-         const formData = new FormData(form);
-    formData.append("access_key", "221464fc-0f76-45f3-8c69-9ff4becbfa82");
-
-    const originalText = submitBtn.textContent;
-
-    submitBtn.textContent = "Sending...";
-    submitBtn.disabled = true;
-
-    try {
-        const response = await fetch("https://api.web3forms.com/submit", {
-            method: "POST",
-            body: formData
-        });
-
-        const data = await response.json();
-
-        if (response.ok) {
-            alert("Success! Your message has been sent.");
-            form.reset();
-        } else {
-            alert("Error: " + data.message);
-        }
-
-    } catch (error) {
-        alert("Something went wrong. Please try again.");
-    } finally {
-        submitBtn.textContent = originalText;
-        submitBtn.disabled = false;
-    }
-      const contactForm = new FormData(contact-form);
-    contactForm.append("access_key", "221464fc-0f76-45f3-8c69-9ff4becbfa82");
-
-    const originalText = submitBtn.textContent;
-
-    submitBtn.textContent = "Sending...";
-    submitBtn.disabled = true;
-
-    try {
-        const response = await fetch("https://api.web3forms.com/submit", {
-            method: "POST",
-            body: contactForm
-        });
-
-        const data = await response.json();
-
-        if (response.ok) {
-            alert("Success! Your message has been sent.");
-            form.reset();
-        } else {
-            alert("Error: " + data.message);
-        }
-
-    } catch (error) {
-        alert("Something went wrong. Please try again.");
-    } finally {
-        submitBtn.textContent = originalText;
-        submitBtn.disabled = false;
-    }
-}
-      }
