@@ -54,23 +54,28 @@
             .v .ad-size-medium { --ad-max-width: 760px; --ad-img-width: 200px; --ad-img-height: 120px; }
             .v .ad-size-large { --ad-max-width: 1200px; --ad-img-width: 340px; --ad-img-height: 200px; }
 
-            /* Description marquee: slide cards from right -> left */
+            /* Description marquee: smooth chain loop sliding cards from right -> left */
             /* `.description` positioned relative (parent container for cards) */
             .description {   position: relative; padding: 18px 12px; width: 100%;}
             .card-marquee {  position: relative; width: 100%; }
             .card-marquee .marquee-viewport { width: 100%; overflow: hidden; -webkit-overflow-scrolling: touch; padding-bottom: 8px; }
             .card-marquee .marquee-runner { display: flex; gap: 18px; align-items: stretch; width: max-content; }
-            /* auto marquee: move whole card sets from right to left */
-            .card-marquee .marquee-runner { animation: marquee var(--marquee-duration, 18s) linear infinite !important; }
-            .card-marquee:hover .marquee-runner { animation-play-state: paused; }
-            @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
-            /* hide manual scroll controls when marquee active */
-            .card-marquee .scroll-btn { display: none; }
-            .card-marquee .card-item { flex: 0 0 auto; width: min(360px, 100%); }
+            
+            /* Chain loop keyframes for smooth continuous scrolling */
+            @keyframes chain-loop { 
+                0% { transform: translateX(0); } 
+                100% { transform: translateX(-50%); } 
+            }
+            
+            /* Entrance Animation for Carousel Cards */
+            .card-item { 
+                opacity: 0; 
+                transform: translateY(20px); 
+                transition: opacity 0.6s ease-out, transform 0.6s cubic-bezier(0.165, 0.84, 0.44, 1); 
+            }
+            .card-item.in { opacity: 1; transform: translateY(0); }
 
-            /* card entry animation (fade + slide) */
-            .card-marquee .card-item { opacity: 0; transform: translateY(14px) scale(0.995); transition: opacity 420ms cubic-bezier(.2,.9,.2,1), transform 420ms cubic-bezier(.2,.9,.2,1); }
-            .card-marquee .card-item.in { opacity: 1; transform: translateY(0) scale(1); }
+            .card-marquee .card-item { flex: 0 0 auto; width: min(360px, 100%); }
              
             /* Scroll controls */
             .card-marquee .scroll-btn { position: absolute; top: 50%; transform: translateY(-50%); width: 44px; height: 44px; border-radius: 50%; background: rgba(15,23,42,0.75); color: #fff; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 20; border: none; }
@@ -108,7 +113,7 @@
             .book.right { right: 0; transform-origin: right center; }
 
             .cover { position: absolute; inset: 0; background: linear-gradient(180deg,#2b3a4a,#15202b); box-shadow: 0 18px 40px rgba(1,6,12,0.6); border-radius: 6px; transform-origin: left center; backface-visibility: hidden; }
-            .right .cover { transform-origin: right center; }
+            .book.right .cover { transform-origin: right center; }
 
             .pages { position: absolute; inset: 6% 6%; background: linear-gradient(180deg,#fff,#f9f9f9); border-radius: 4px; box-shadow: inset 0 2px 8px rgba(0,0,0,0.06); overflow: auto; padding: 32px; display: flex; align-items: center; justify-content: center; }
             .book-nav { display: flex; flex-direction: column; gap: 16px; font-size: 20px; }
@@ -120,8 +125,8 @@
             .book.right .cover { transform: rotateY(0deg); }
 
             /* open state toggle */
-            body.book-open .book.left .cover { transform: rotateY(-160deg); transition: transform 900ms cubic-bezier(.2,.9,.22,1); }
-            body.book-open .book.right .cover { transform: rotateY(160deg); transition: transform 900ms cubic-bezier(.2,.9,.22,1); }
+            body.book-open .book.left .cover { transform: rotateY(-160deg); transition: transform 650ms cubic-bezier(.2,.9,.22,1); }
+            body.book-open .book.right .cover { transform: rotateY(160deg); transition: transform 650ms cubic-bezier(.2,.9,.22,1); }
             body.book-open .book-menu { display: flex; }
 
             /* hamburger morph - transform to x with orange color */
@@ -328,19 +333,19 @@
             <div class="carousel-container" style="position: relative; max-width: 800px; margin: 0 auto; overflow: hidden; border-radius: 15px; box-shadow: 0 8px 20px rgba(0,0,0,0.15);">
                 <!-- Carousel Slides -->
                 <div class="carousel-wrapper" style="position: relative; width: 100%; height: 400px; background: #000;">
-                    <div class="carousel-slide" style="display: flex; position: absolute; width: 100%; height: 100%; top: 0; left: 0; opacity: 0; transition: opacity 1.2s ease-in-out; align-items: center; justify-content: center;">
+                    <div class="carousel-slide" style="display: flex; position: absolute; width: 100%; height: 100%; top: 0; left: 0; opacity: 0; transition: opacity 0.8s ease-in-out; align-items: center; justify-content: center;">
                         <img src="f.jpg.jpg" style="width: 100%; height: 100%; object-fit: cover; cursor: pointer;" onclick="openModal(this.src)">
                     </div>
-                    <div class="carousel-slide" style="display: flex; position: absolute; width: 100%; height: 100%; top: 0; left: 0; opacity: 1; transition: opacity 1.2s ease-in-out; align-items: center; justify-content: center;">
+                    <div class="carousel-slide" style="display: flex; position: absolute; width: 100%; height: 100%; top: 0; left: 0; opacity: 1; transition: opacity 0.8s ease-in-out; align-items: center; justify-content: center;">
                         <img src="ty.jpg__.jpg" style="width: 100%; height: 100%; object-fit: cover; cursor: pointer;" onclick="openModal(this.src)">
                     </div>
-                    <div class="carousel-slide" style="display: flex; position: absolute; width: 100%; height: 100%; top: 0; left: 0; opacity: 0; transition: opacity 1.2s ease-in-out; align-items: center; justify-content: center;">
+                    <div class="carousel-slide" style="display: flex; position: absolute; width: 100%; height: 100%; top: 0; left: 0; opacity: 0; transition: opacity 0.8s ease-in-out; align-items: center; justify-content: center;">
                         <img src="a.jpg.jpg" style="width: 100%; height: 100%; object-fit: cover; cursor: pointer;" onclick="openModal(this.src)">
                     </div>
-                    <div class="carousel-slide" style="display: flex; position: absolute; width: 100%; height: 100%; top: 0; left: 0; opacity: 0; transition: opacity 1.2s ease-in-out; align-items: center; justify-content: center;">
+                    <div class="carousel-slide" style="display: flex; position: absolute; width: 100%; height: 100%; top: 0; left: 0; opacity: 0; transition: opacity 0.8s ease-in-out; align-items: center; justify-content: center;">
                         <img src="z.jpg.jpg" style="width: 100%; height: 100%; object-fit: cover; cursor: pointer;" onclick="openModal(this.src)">
                     </div>
-                    <div class="carousel-slide" style="display: flex; position: absolute; width: 100%; height: 100%; top: 0; left: 0; opacity: 0; transition: opacity 1.2s ease-in-out; align-items: center; justify-content: center;">
+                    <div class="carousel-slide" style="display: flex; position: absolute; width: 100%; height: 100%; top: 0; left: 0; opacity: 0; transition: opacity 0.8s ease-in-out; align-items: center; justify-content: center;">
                         <img src="s.jpg.jpg" style="width: 100%; height: 100%; object-fit: cover; cursor: pointer;" onclick="openModal(this.src)">
                     </div>
 
@@ -389,7 +394,7 @@
                         indicator.style.height = '12px';
                         indicator.style.borderRadius = '50%';
                         indicator.style.cursor = 'pointer';
-                        indicator.style.transition = 'background 5s';
+                        indicator.style.transition = 'background 0.3s';
                         indicator.style.background = index === 0 ? 'white' : 'rgba(255,255,255,0.5)';
                         indicator.onclick = () => currentSlide(index);
                         indicatorsContainer.appendChild(indicator);
@@ -753,9 +758,9 @@
                         reliable, energy-efficient, and long-lasting solutions.
                     </p>
                     <ul>
-                        <li>Exper AC installation & servicing</li>
+                        <li>Expert AC installation & servicing</li>
                         <li>Ventilation and refrigeration solutions</li>
-                        <li>Upgrades and refurbrishment</li>
+                        <li>Upgrades and refurbishment</li>
                         <li>24/7 emergency breakdown support</li>
                     </ul>
                     <a href="#">Read More About Us</a>
@@ -776,20 +781,20 @@
             </div>
             <div class="service-card red">
                 <h3>🦾 Maintenance</h3>
-                <p>Regular servicing to keep your sytems running at peak performance.
+                <p>Regular servicing to keep your systems running at peak performance.
                     Prevent breakdowns and save energy with our expert maintenance solutions.
                 </p>
                 <a href="installation.html" class="btn">READ MORE</a>
             </div>
             <div class="service-card deep">
                 <h3>⚙️ Repair</h3>
-               <p>Fast and reliable repairs for air conditioning and ventilation systems.
-                We diagnose issues quickly and comfort in no time.</p>
+                <p>Fast and reliable repairs for air conditioning and ventilation systems.
+                We diagnose issues quickly to restore comfort in no time.</p>
                 <a href="installation.html" class="btn">READ MORE</a> 
             </div>
             <div class="service-card bwoy">
                 <h3>🧑‍🔧 Consultation</h3>
-                <p>Not sure what system fits your needs? Our experts provide tailord advice
+                <p>Not sure what system fits your needs? Our experts provide tailored advice
                     on choosing the right air solution for your home or business.
                 </p>
                 <a href="installation.html" class="btn">READ MORE</a>
@@ -797,18 +802,18 @@
         </div>
         <section class="clean">
             <div class="nick">
-                <h2>Why chose Anesis Air Solutions?</h2>
-                <p>We provide reliable, and refrigeration solutions tailord to meet the needs
+                <h2>Why choose Anesis Air Solutions?</h2>
+                <p>We provide reliable refrigeration solutions tailored to meet the needs
                     of homes and businesses. With experienced technicians, 24/7 support, and high-
                     quality services, your comfort is always guaranteed.
                 </p>
-                <a href="installation.html" class="ease">Contuct Us</a>
+                <a href="#contact" class="ease">Contact Us</a>
             </div>
         </section>
         <div class="map">
             <div class="location" style="text-align: center;">
                 <h2>Location</h2>
-                <div class="embed-map-fixed"><div class="embed-map-container"><iframe class="embd-map-frame" style="border: 0; border-radius: 12px;" 12px; allowfullscreen="" height="450" width="100%" loading="lazy" src="https://maps.google.com/maps?width=600&height=400&hl=en&q=kitintale&t=&z=14&ie=UTF8&iwloc=B&output=embed"></iframe>
+                <div class="embed-map-fixed"><div class="embed-map-container"><iframe class="embd-map-frame" style="border: 0; border-radius: 12px;" allowfullscreen="" height="450" width="100%" loading="lazy" src="https://maps.google.com/maps?width=600&height=400&hl=en&q=kitintale&t=&z=14&ie=UTF8&iwloc=B&output=embed"></iframe></div></div>
             </div>
             
         </div>
@@ -829,11 +834,11 @@
            <input type="email" name="email" id="email" placeholder="Your Email" required 
              style="padding: 12px; border: 1px solid #ccc;
            border-radius: 8px; font-size: 15px;">
-           <textarea name="subject" id="subject" placeholder="Your Message" rows="5" required 
+           <textarea name="message" id="message" placeholder="Your Message" rows="5" required 
              style="padding: 12px; border: 1px solid #ccc;
            border-radius: 8px; font-size: 15px;"></textarea>
 
-           <button type="submit" id="button" onclick="sendMail()"
+           <button type="submit" id="button"
                style="padding: 14px; background: #ec760e; color: white; font-size: 16px; 
                border: none; border-radius: 8px; cursor: pointer; transition: 0.3s;">Send Message</button>
         </form>
@@ -870,7 +875,7 @@
             <a href="https://instagram.com" target="_blank"><i class="fab fa-instagram fa-2x"></i></a>
             <a href="mailto:magezij924@gmail.com"><i class="fab fa-envelope fa-2x"></i></a>
             <a href="https://www.linkedin.com/feed/" ><i class="fa-brands fa-linkedin fa-2x"></i></a>
-            <a href="https://Pintrest.com"><i class="fab fa-Pintrest fa-2x"></i></a>
+            <a href="https://pinterest.com"><i class="fab fa-pinterest fa-2x"></i></a>
         </footer>
         <div class="before" style="text-align: center; padding: 16px 0; background: #0f172a; color: #e2e8f0;">
             <span></span>
