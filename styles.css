@@ -11,10 +11,10 @@ body {
 
 /* Card-item motion: only the direct children of `.card-item` will move. */
 @keyframes card-float {
-  0%   { transform: translateY(0) translateX(0) rotate(0deg); }
-  25%  { transform: translateY(-6px) translateX(-4px) rotate(-0.35deg); }
-  50%  { transform: translateY(0) translateX(0) rotate(0deg); }
-  75%  { transform: translateY(6px) translateX(4px) rotate(0.35deg); }
+  0%   { transform: translateY(0) rotate(0deg); }
+  25%  { transform: translateY(-4px) rotate(-0.2deg); }
+  50%  { transform: translateY(0) rotate(0deg); }
+  75%  { transform: translateY(4px) rotate(0.2deg); }
   100% { transform: translateY(0) translateX(0) rotate(0deg); }
 }
 
@@ -467,8 +467,7 @@ footer a i {
 /* Ensure only `.card-item` elements animate: disable other animations explicitly */
 .tool .ticker-runner,
 .before,
-#flame,
-a[href*="wa.me"] {
+#flame {
   animation: none !important;
 }
 
@@ -697,5 +696,30 @@ a[href*="wa.me"] {
     right: 6px;
   }
 }
-                 
 
+/* ============================================
+   Smooth Chain Loop Animation for Card Marquee
+   ============================================ */
+
+/* Override the marquee runner animation in styles.css to match the HTML inline styles */
+.card-marquee .marquee-runner {
+  animation: chain-loop var(--marquee-duration, 28s) cubic-bezier(0.25, 0.1, 0.25, 1) infinite !important;
+  will-change: transform;
+}
+
+/* Chain loop keyframes for smooth continuous scrolling */
+@keyframes chain-loop { 
+  0% { transform: translateX(0); } 
+  100% { transform: translateX(-50%); } 
+}
+
+/* Add subtle floating effect to cards during movement */
+.card-marquee .card-item {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card-marquee:hover .card-item {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 24px rgba(0,0,0,0.3);
+}
+                 
