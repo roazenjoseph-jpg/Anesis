@@ -809,7 +809,15 @@
                                 dot.className = 'carousel-dot' + (index === 0 ? ' active' : '');
                                 dot.setAttribute('data-index', index);
                                 dot.setAttribute('aria-label', `Go to slide ${index + 1}`);
-                                dot.addEventListener('click', () => goToSlide(index));
+                                dot.addEventListener('click', () => {
+                                    isHovering = true;
+                                    stopAutoPlay();
+                                    goToSlide(index);
+                                    setTimeout(() => {
+                                        isHovering = false;
+                                        startAutoPlay();
+                                    }, 1200);
+                                });
                                 dotsContainer.appendChild(dot);
                             });
                         }
@@ -931,11 +939,39 @@
                             startAutoPlay();
                         });
 
-                        // Touch support - pause on touch, resume after
-                        viewport.addEventListener('touchstart', stopAutoPlay, { passive: true });
+                        // Touch/gesture support - user can drag left/right; stop loop while interacting
+                        viewport.addEventListener('touchstart', () => {
+                            isHovering = true;
+                            stopAutoPlay();
+                        }, { passive: true });
+                        viewport.addEventListener('touchmove', () => {
+                            isHovering = true;
+                            stopAutoPlay();
+                        }, { passive: true });
                         viewport.addEventListener('touchend', () => {
+                            isHovering = false;
                             setTimeout(startAutoPlay, 3000);
                         }, { passive: true });
+
+                        // pointer drag support for desktop + pluggable touch pointer events
+                        viewport.addEventListener('pointerdown', () => {
+                            isHovering = true;
+                            stopAutoPlay();
+                        });
+                        viewport.addEventListener('pointerup', () => {
+                            isHovering = false;
+                            setTimeout(startAutoPlay, 1200);
+                        });
+
+                        // click support to temporarily pause auto-play and allow manual navigation
+                        viewport.addEventListener('click', () => {
+                            isHovering = true;
+                            stopAutoPlay();
+                            setTimeout(() => {
+                                isHovering = false;
+                                startAutoPlay();
+                            }, 1200);
+                        });
 
                         // Keyboard navigation
                         marquee.addEventListener('keydown', (e) => {
