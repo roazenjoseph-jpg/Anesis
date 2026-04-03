@@ -564,7 +564,7 @@ footer a i {
   display: flex !important;
   position: absolute;
   top: 50%;
-  transform: translateY(-50%);
+  transform: translateY(50%);
   width: 48px;
   height: 48px;
   border-radius: 50%;
@@ -610,6 +610,7 @@ footer a i {
 
 /* Marquee container positioning for dots */
 .description {
+  flex: 0 1 calc(50% - 16px);
   position: relative;
   padding: 18px 12px;
   width: 100%;
@@ -617,16 +618,17 @@ footer a i {
 }
 
 .description .helo {
-  position: relative;
+  position: absolute;
 }
 
 /* Ensure proper card marquee container layout */
 .card-marquee {
-  position: relative;
+  position: absolute;
   width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
+
 }
 
 /* Tablet adjustments */
@@ -653,17 +655,17 @@ footer a i {
     scroll-snap-type: x mandatory;
     padding-bottom: 10px;
   }
-  .card-marquee .marquee-runner { gap: 12px; }
-  .card-marquee .card-item { width: 86%; scroll-snap-align: start; padding: 6px 0; }
+  .card-marquee .marquee-runner { gap: 2px; }
+  .card-marquee .card-item { width: 100%; scroll-snap-align: start; padding: 6px 0; }
 
   /* simplify and scale ad-card content for small screens */
   .v { padding: 12px 8px; }
-  .v .ad-card { flex-direction: column; gap: 10px; padding: 12px; border-radius: 12px; }
+  .v .ad-card { flex-direction: column; gap: 8px; padding: 4px; border-radius: 18px; }
   .v .ad-img { width: 100%; height: 140px; object-fit: cover; }
   .v .ad-content h2 { font-size: 18px; }
   .v .ad-content p { font-size: 14px; line-height: 1.38; }
   .v .vtn { display: block; width: 100%; text-align: center; padding: 12px; }
-  .v .ad-badge { top: 10px; left: 10px; padding: 5px 8px; font-size: 11px; }
+  .v .ad-badge { top: 10px; left: 10px; padding: 5px 5px; font-size: 11px; }
 
   /* make ticker readable but avoid heavy animation on phones */
   .card-item .ad-ticker .runner.spontaneous { animation-play-state: paused !important; }
@@ -703,19 +705,19 @@ footer a i {
 
 /* Override the marquee runner animation in styles.css to match the HTML inline styles */
 .card-marquee .marquee-runner {
-  animation: chain-loop var(--marquee-duration, 28s) cubic-bezier(0.25, 0.1, 0.25, 1) infinite !important;
-  will-change: transform;
+  animation: chain-loop var(--marquee-duration, 3s) cubic-bezier(0.25, 0.25, 0.25, 0.25) infinite !important;
+  will-change: contents;
 }
 
 /* Chain loop keyframes for smooth continuous scrolling */
 @keyframes chain-loop { 
-  0% { transform: translateX(0); } 
+  100% { transform: translateX(50%); } 
   100% { transform: translateX(-50%); } 
 }
 
 /* Add subtle floating effect to cards during movement */
 .card-marquee .card-item {
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition: transform 0.6s ease, box-shadow 0.6s ease;
 }
 
 .card-marquee:hover .card-item {
