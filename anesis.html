@@ -154,6 +154,7 @@
                 width: 100%;
                 overflow-x: auto;
                 overflow-y: hidden;
+                scroll-behavior: smooth;
                 -webkit-overflow-scrolling: touch;
                 padding: 8px 0 12px 0;
                 scrollbar-width: thin;
@@ -954,11 +955,37 @@
                         }, { passive: true });
 
                         // pointer drag support for desktop + pluggable touch pointer events
-                        viewport.addEventListener('pointerdown', () => {
+                        let isDragging = false;
+                        let dragStartX = 0;
+                        let dragStartScroll = 0;
+
+                        viewport.addEventListener('pointerdown', (event) => {
                             isHovering = true;
                             stopAutoPlay();
+                            isDragging = true;
+                            dragStartX = event.clientX;
+                            dragStartScroll = viewport.scrollLeft;
+                            viewport.style.scrollBehavior = 'auto';
                         });
+
+                        viewport.addEventListener('pointermove', (event) => {
+                            if (!isDragging) return;
+                            const dx = dragStartX - event.clientX;
+                            viewport.scrollLeft = dragStartScroll + dx;
+                        });
+
                         viewport.addEventListener('pointerup', () => {
+                            if (!isDragging) return;
+                            isDragging = false;
+                            viewport.style.scrollBehavior = 'smooth';
+                            isHovering = false;
+                            setTimeout(startAutoPlay, 1200);
+                        });
+
+                        viewport.addEventListener('pointerleave', () => {
+                            if (!isDragging) return;
+                            isDragging = false;
+                            viewport.style.scrollBehavior = 'smooth';
                             isHovering = false;
                             setTimeout(startAutoPlay, 1200);
                         });
