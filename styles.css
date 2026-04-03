@@ -659,7 +659,7 @@ footer a i {
   .card-marquee .card-item { width: 100%; scroll-snap-align: start; padding: 6px 0; }
 
   /* simplify and scale ad-card content for small screens */
-  .v { padding: 12px 8px; }
+  .v { padding: 25px 12px; }
   .v .ad-card { flex-direction: column; gap: 8px; padding: 4px; border-radius: 18px; }
   .v .ad-img { width: 100%; height: 140px; object-fit: cover; }
   .v .ad-content h2 { font-size: 18px; }
@@ -705,13 +705,13 @@ footer a i {
 
 /* Override the marquee runner animation in styles.css to match the HTML inline styles */
 .card-marquee .marquee-runner {
-  animation: chain-loop var(--marquee-duration, 3s) cubic-bezier(0.25, 0.25, 0.25, 0.25) infinite !important;
-  will-change: contents;
+  animation: chain-loop var(--marquee-duration, 20s) cubic-bezier(0.25, 0.25, 0.25, 0.25) infinite !important;
+  will-change: auto;
 }
 
 /* Chain loop keyframes for smooth continuous scrolling */
 @keyframes chain-loop { 
-  100% { transform: translateX(50%); } 
+  0% { transform: translateX(50%); } 
   100% { transform: translateX(-50%); } 
 }
 
