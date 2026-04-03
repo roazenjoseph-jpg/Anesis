@@ -11,27 +11,83 @@
             /* Advertising card in section .v — graphic-style enhancements */
             .v { overflow: visible; padding: 28px 18px; display: flex; justify-content: center; background: linear-gradient(90deg,#071826 0%, #0b3b55 100%); }
             /* customization variables: override these on the .ad-wrapper or via classes */
-            .v .ad-wrapper { --ad-max-width: 980px; --ad-img-width: 260px; --ad-img-height: 160px; width: 100%; max-width: var(--ad-max-width); }
-            .v .ad-card {
-                position: relative;
-                display: flex; flex-direction: column; align-items: center; gap: 8px;
-                background: linear-gradient(180deg, rgba(255,255,255,0.98) 0%, rgba(250,244,238,0.9) 100%);
-                padding: 12px; border-radius: 14px; box-shadow: 0 18px 40px rgba(3,10,18,0.45);
-                transition: transform 0.36s cubic-bezier(.2,.9,.2,1), box-shadow 0.36s;
-                overflow: hidden; backdrop-filter: blur(6px);
-                width: 200px;
+            .v .ad-wrapper {
+                --ad-max-width: 980px;
+                --ad-img-width: 260px;
+                --ad-img-height: 160px;
+                width: 100%;
+                max-width: var(--ad-max-width);
+                display: flex;
+                justify-content: center;
+                padding: 0;
+                margin: 0 auto;
+                overflow: hidden;
             }
-            .v .ad-card:hover { transform: translateY(-8px); box-shadow: 0 26px 60px rgba(3,10,18,0.55); }
+            .v .ad-card {
+                margin: 0 10px;
+                flex-shrink: 0;
+                position: relative;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 10px;
+                width: min(220px, calc(100vw - 48px));
+                max-width: 220px;
+                background: linear-gradient(180deg, rgba(255,255,255,0.98) 0%, rgba(250,244,238,0.9) 100%);
+                padding: 14px 18px 14px 14px;
+                border-radius: 14px;
+                box-shadow: 0 16px 35px rgba(3,10,18,0.42);
+                transition: transform 20s cubic-bezier(.2,.9,.2,1), box-shadow 0.36s;
+                overflow: hidden;
+                backdrop-filter: blur(6px);
+                box-sizing: border-box;
+                width: var(--ad-img-width);
+            }
+            .v .ad-card:hover { animation-play-state: paused; transform: translateY(-8px); box-shadow: 0 26px 60px rgba(3,10,18,0.55); }
             .v .ad-card::before {
                 content: '';
-                position: absolute; right: -60px; top: -60px; width: 240px; height: 240px;
-                background: linear-gradient(135deg, rgba(255,167,38,0.14), rgba(255,90,95,0.06)); transform: rotate(25deg);
+                position: absolute;
+                right: -52px;
+                top: -52px;
+                width: 220px;
+                height: 220px;
+                background: linear-gradient(135deg, rgba(255,167,38,0.14), rgba(255,90,95,0.06));
+                transform: rotate(25deg);
             }
-            .v .ad-img { width: 100%; height: 70px; object-fit: cover; border-radius: 10px; box-shadow: 0 8px 18px rgba(2,6,23,0.28); }
-            .v .ad-content { color: #071826; font-family: 'Segoe UI', Roboto, Arial, sans-serif; }
-            .v .ad-content h2 { margin: 0 0 6px 0; font-size: 18px; letter-spacing: -0.5px; }
-            .v .ad-content p { margin: 0 0 8px 0; color: #22343b; line-height: 1.4; font-size: 13px; }
-            .v .price { font-size: 20px; font-weight: bold; color: #071826; margin: 0 0 8px 0; }
+            .v .ad-img {
+                width: 100%;
+                height: 120px;
+                object-fit: cover;
+                border-radius: 10px;
+                box-shadow: 0 8px 18px rgba(2,6,23,0.28);
+            }
+            .v .ad-content {
+                color: #071826;
+                font-family: 'Segoe UI', Roboto, Arial, sans-serif;
+                width: 100%;
+                padding: 0 0 0 6px;
+                text-align: center;
+                margin-right: 2px;
+            }
+            .v .ad-content h2 {
+                margin: 0 0 8px 0;
+                font-size: 18px;
+                letter-spacing: -0.5px;
+                line-height: 1.2;
+            }
+            .v .ad-content p {
+                margin: 0 0 10px 0;
+                color: #22343b;
+                line-height: 1.4;
+                font-size: 13px;
+                min-height: 40px;
+            }
+            .v .price {
+                font-size: 20px;
+                font-weight: bold;
+                color: #071826;
+                margin: 0 0 8px 0;
+            }
             .v .old-price { text-decoration: line-through; color: #888; margin-left: 8px; }
             .v .discount { color: #ff5a5f; font-weight: bold; font-size: 14px; margin: 0 0 12px 0; }
             .v .vtn { display: inline-block; background: linear-gradient(90deg,#0f172a,#0b2540); color: #fff; padding: 10px 16px; border-radius: 10px; text-decoration: none; box-shadow: 0 8px 18px rgba(11,22,40,0.35); font-weight: 600; }
@@ -58,8 +114,8 @@
             .v .ad-size-medium { --ad-max-width: 760px; --ad-img-width: 200px; --ad-img-height: 120px; }
             .v .ad-size-large { --ad-max-width: 1200px; --ad-img-width: 340px; --ad-img-height: 200px; }
 
-            /* Description marquee: smooth chain loop sliding cards from right -> left */
-            /* `.description` is a full-width promotional card strip container */
+            /* ===== SECTION: DESCRIPTION CAROUSEL ===== */
+            /* Main container for promotional cards carousel */
             .description {
                 position: relative;
                 width: 100%;
@@ -72,92 +128,161 @@
                 color: #f9fcff;
                 animation: description-entrance 0.8s ease both;
             }
+
+            /* Inner wrapper for maximum width constraint */
             .description .helo {
                 max-width: 1200px;
                 margin: 0 auto;
             }
+
+            /* Tool container for card carousel */
             .description .tool {
                 position: relative;
                 width: 100%;
             }
+
+            /* ===== CARD MARQUEE CAROUSEL ===== */
+            /* Main marquee container */
             .card-marquee {
                 position: relative;
                 width: 100%;
             }
+
+            /* Viewport (visible area) */
             .card-marquee .marquee-viewport {
                 width: 100%;
                 overflow: hidden;
                 -webkit-overflow-scrolling: touch;
                 padding: 8px 0 12px 0;
             }
+
+            /* Runner container - holds scrollable cards */
             .card-marquee .marquee-runner {
                 display: flex;
-                gap: 18px;
+                gap: 10px;
                 align-items: stretch;
                 width: max-content;
-                animation: chain-loop 22s linear infinite;
+                animation: chain-loop 35s linear infinite;
                 will-change: transform;
             }
+
+            /* Pause animation on hover or focus */
             .card-marquee:hover .marquee-runner,
             .card-marquee:focus-within .marquee-runner {
                 animation-play-state: paused;
             }
+
+            /* Individual card items */
             .card-marquee .card-item {
                 flex: 0 0 auto;
                 width: 210px;
                 min-width: 210px;
-                transform: translateY(20px);
                 opacity: 0;
-                animation: card-fade-in 0.7s ease-out forwards;
+                transform: translateY(20px);
+                animation: card-fade-in 0.3s ease-out forwards, card-bob 4.4s ease-in-out infinite 0.75s;
             }
+
+            /* Card item active state */
             .card-marquee .card-item.in {
                 opacity: 1;
                 transform: translateY(0);
             }
-            .card-marquee .card-item:nth-child(1) { animation-delay: 0.08s; }
-            .card-marquee .card-item:nth-child(2) { animation-delay: 0.16s; }
-            .card-marquee .card-item:nth-child(3) { animation-delay: 0.24s; }
-            .card-marquee .card-item:nth-child(4) { animation-delay: 0.32s; }
-            .card-marquee .card-item:nth-child(5) { animation-delay: 0.40s; }
 
-            @keyframes chain-loop {
-                0% { transform: translateX(0); }
-                100% { transform: translateX(-50%); }
+            /* ===== SCROLL CONTROLS ===== */
+            /* Scroll button base styles */
+            .card-marquee .scroll-btn {
+                position: absolute;
+                top: 50%;
+                transform: translateY(-50%);
+                width: 44px;
+                height: 44px;
+                border-radius: 50%;
+                background: rgba(15, 23, 42, 0.75);
+                color: #fff;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                cursor: pointer;
+                z-index: 20;
+                border: none;
+                transition: background 0.3s ease;
             }
-            @keyframes card-fade-in {
-                0% { opacity: 0; transform: translateY(20px); }
-                100% { opacity: 1; transform: translateY(0); }
+
+            /* Left scroll button */
+            .card-marquee .scroll-btn.left {
+                left: 8px;
             }
+
+            /* Right scroll button */
+            .card-marquee .scroll-btn.right {
+                right: 8px;
+            }
+
+            /* Scroll button hover state */
+            .card-marquee .scroll-btn:hover {
+                background: rgba(15, 23, 42, 0.9);
+            }
+
+            /* ===== SCROLLBAR STYLING ===== */
+            .card-marquee .marquee-viewport::-webkit-scrollbar {
+                height: 10px;
+            }
+
+            .card-marquee .marquee-viewport::-webkit-scrollbar-track {
+                background: rgba(0, 0, 0, 0.06);
+                border-radius: 10px;
+            }
+
+            .card-marquee .marquee-viewport::-webkit-scrollbar-thumb {
+                background: rgba(11, 22, 40, 0.45);
+                border-radius: 10px;
+            }
+
+            /* ===== ANIMATIONS ===== */
+            /* Entrance animation for description section */
             @keyframes description-entrance {
                 0% { opacity: 0; transform: translateY(12px); }
                 100% { opacity: 1; transform: translateY(0); }
             }
 
-            /* Pause marquee motion at reduced scale so it stays accessible */
-            .card-marquee:focus-within .marquee-runner,
-            .card-marquee:hover .marquee-runner {
-                animation-play-state: paused;
+            /* Card fade-in entrance animation */
+            @keyframes card-fade-in {
+                0% { opacity: 0; transform: translateY(20px); }
+                100% { opacity: 1; transform: translateY(0); }
             }
 
-            /* Scroll controls */
-            .card-marquee .scroll-btn { position: absolute; top: 50%; transform: translateY(-50%); width: 44px; height: 44px; border-radius: 50%; background: rgba(15,23,42,0.75); color: #fff; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 20; border: none; }
-            .card-marquee .scroll-btn.left { left: 8px; }
-            .card-marquee .scroll-btn.right { right: 8px; }
-            .card-marquee .scroll-btn:hover { background: rgba(15,23,42,0.9); }
+            /* Subtle bobbing animation for cards */
+            @keyframes card-bob {
+                0% { transform: translateY(0); }
+                50% { transform: translateY(-4px); }
+                100% { transform: translateY(4px); }
+            }
 
-            /* scrollbar styling */
-            .card-marquee .marquee-viewport::-webkit-scrollbar { height: 10px; }
-            .card-marquee .marquee-viewport::-webkit-scrollbar-track { background: rgba(0,0,0,0.06); border-radius: 10px; }
-            .card-marquee .marquee-viewport::-webkit-scrollbar-thumb { background: rgba(11,22,40,0.45); border-radius: 10px; }
+            /* Horizontal loop animation (currently disabled) */
+            @keyframes chain-loop {
+                0% { transform: translateX(100%); }
+                50%{transform: translateX(0);}
+                100% { transform: translateX(-100%); }
+            }
 
-            /* responsive tweaks for runner items */
+            /* ===== RESPONSIVE STYLES ===== */
             @media (max-width: 980px) {
-                .card-marquee .card-item { width: min(72%, 320px); }
+                .card-marquee .card-item {
+                    width: min(72%, 320px);
+                }
             }
+
             @media (max-width: 720px) {
-                .card-marquee .card-item { width: 86%; }
-                .card-marquee .marquee-runner { gap: 12px; }
-                .card-marquee .scroll-btn { width: 40px; height: 40px; }
+                .card-marquee .card-item {
+                    width: 86%;
+                }
+                .card-marquee .marquee-runner {
+                    gap: 12px;
+                }
+                .card-marquee .scroll-btn {
+                    width: 40px;
+                    height: 40px;
+                }
             }
 
             /* Book-style hamburger menu */
@@ -257,8 +382,6 @@
                 
         </nav>
         <section class="description">
-            <div class="helo">
-                <div class="tool">
                     <div class="card-marquee" aria-hidden="false">
                             <button class="scroll-btn left" aria-label="Previous promotion">❮</button>
                             <div class="marquee-viewport">
@@ -398,7 +521,6 @@
                     <button class="carousel-dot" data-index="1" aria-label="Go to slide 2"></button>
                     <button class="carousel-dot" data-index="2" aria-label="Go to slide 3"></button>
                 </div>
-            </div>
         </section>
 
         <section class="Jk" style="background: #f9f9f9; font-family: Arial, sans-serif; padding: 40px 20px;">
@@ -632,7 +754,7 @@
                         
                         let currentIndex = 0;
                         let autoPlayInterval;
-                        const autoPlayDelay = 4000; // 4 seconds between slides
+                        const autoPlayDelay = 20000; // 20 seconds between slides for smooth running
                         let isHovering = false;
 
                         // Create dots dynamically based on number of original cards
@@ -1059,23 +1181,9 @@
                 }
 
                 function applyRandom() {
-                    const dur = (rand(6, 14)).toFixed(2) + 's'; // 6-14s
+                    const dur = (rand(18, 30)).toFixed(2) + 's'; // 18-30s slower
                     const delay = (rand(0, 4)).toFixed(2) + 's'; // small offset
-                    const dir = Math.random() > 0.84 ? 'reverse' : 'normal'; // occasional reverse
-                    runner.style.setProperty('--ad-ticker-duration', dur);
-                    runner.style.setProperty('--ad-ticker-delay', delay);
-                    runner.style.setProperty('--ad-ticker-direction', dir);
-                    // retrigger animation by toggling class
-                    runner.classList.remove('spontaneous');
-                    void runner.offsetWidth;
-                    runner.classList.add('spontaneous');
-                }
-
-                applyRandom();
-                // re-randomize intermittently so movement feels spontaneous
-                const interval = Math.floor(rand(5000, 12000));
-                setInterval(applyRandom, interval);
-
+                    const dir = Math.random() > 0.88 ? 'reverse' : 'normal'; // rare reverse
                 // respect hover/focus (pause animation)
                 runner.addEventListener('mouseenter', () => runner.style.setProperty('animation-play-state', 'paused'));
                 runner.addEventListener('mouseleave', () => runner.style.removeProperty('animation-play-state'));
