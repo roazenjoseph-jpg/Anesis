@@ -14,11 +14,12 @@
             .v .ad-wrapper { --ad-max-width: 980px; --ad-img-width: 260px; --ad-img-height: 160px; width: 100%; max-width: var(--ad-max-width); }
             .v .ad-card {
                 position: relative;
-                display: flex; align-items: center; gap: 20px;
+                display: flex; flex-direction: column; align-items: center; gap: 8px;
                 background: linear-gradient(180deg, rgba(255,255,255,0.98) 0%, rgba(250,244,238,0.9) 100%);
-                padding: 16px; border-radius: 14px; box-shadow: 0 18px 40px rgba(3,10,18,0.45);
+                padding: 12px; border-radius: 14px; box-shadow: 0 18px 40px rgba(3,10,18,0.45);
                 transition: transform 0.36s cubic-bezier(.2,.9,.2,1), box-shadow 0.36s;
                 overflow: hidden; backdrop-filter: blur(6px);
+                width: 200px;
             }
             .v .ad-card:hover { transform: translateY(-8px); box-shadow: 0 26px 60px rgba(3,10,18,0.55); }
             .v .ad-card::before {
@@ -26,10 +27,13 @@
                 position: absolute; right: -60px; top: -60px; width: 240px; height: 240px;
                 background: linear-gradient(135deg, rgba(255,167,38,0.14), rgba(255,90,95,0.06)); transform: rotate(25deg);
             }
-            .v .ad-img { width: var(--ad-img-width); height: var(--ad-img-height); object-fit: cover; border-radius: 10px; flex: 0 0 var(--ad-img-width); box-shadow: 0 8px 18px rgba(2,6,23,0.28); clip-path: polygon(0 0,100% 0,85% 100%,0% 100%); }
+            .v .ad-img { width: 100%; height: 70px; object-fit: cover; border-radius: 10px; box-shadow: 0 8px 18px rgba(2,6,23,0.28); }
             .v .ad-content { color: #071826; font-family: 'Segoe UI', Roboto, Arial, sans-serif; }
-            .v .ad-content h2 { margin: 0 0 8px 0; font-size: 26px; letter-spacing: -0.5px; }
-            .v .ad-content p { margin: 0 0 12px 0; color: #22343b; line-height: 1.4; font-size: 15px; }
+            .v .ad-content h2 { margin: 0 0 6px 0; font-size: 18px; letter-spacing: -0.5px; }
+            .v .ad-content p { margin: 0 0 8px 0; color: #22343b; line-height: 1.4; font-size: 13px; }
+            .v .price { font-size: 20px; font-weight: bold; color: #071826; margin: 0 0 8px 0; }
+            .v .old-price { text-decoration: line-through; color: #888; margin-left: 8px; }
+            .v .discount { color: #ff5a5f; font-weight: bold; font-size: 14px; margin: 0 0 12px 0; }
             .v .vtn { display: inline-block; background: linear-gradient(90deg,#0f172a,#0b2540); color: #fff; padding: 10px 16px; border-radius: 10px; text-decoration: none; box-shadow: 0 8px 18px rgba(11,22,40,0.35); font-weight: 600; }
             .v .vtn:active, .v .vtn:focus { transform: translateY(1px); }
 
@@ -44,9 +48,9 @@
             /* Responsive */
             @media (max-width: 720px) {
                 .v { padding: 18px 10px; }
-                .v .ad-card { flex-direction: column; gap: 12px; padding: 14px; }
-                .v .ad-img { width: 100%; height: 180px; flex: auto; clip-path: none; }
-                .v .ad-content h2 { font-size: 20px; }
+                .v .ad-card { flex-direction: column; gap: 8px; padding: 10px; width: 180px; }
+                .v .ad-img { width: 100%; height: 60px; }
+                .v .ad-content h2 { font-size: 16px; }
             }
 
             /* size utility classes (can be added to `.ad-wrapper`) */
@@ -55,28 +59,86 @@
             .v .ad-size-large { --ad-max-width: 1200px; --ad-img-width: 340px; --ad-img-height: 200px; }
 
             /* Description marquee: smooth chain loop sliding cards from right -> left */
-            /* `.description` positioned relative (parent container for cards) */
-            .description {   position: relative; padding: 18px 12px; width: 100%;}
-            .card-marquee {  position: relative; width: 100%; }
-            .card-marquee .marquee-viewport { width: 100%; overflow: hidden; -webkit-overflow-scrolling: touch; padding-bottom: 8px; }
-            .card-marquee .marquee-runner { display: flex; gap: 18px; align-items: stretch; width: max-content; }
-            
-            /* Chain loop keyframes for smooth continuous scrolling */
-            @keyframes chain-loop { 
-                0% { transform: translateX(0); } 
-                100% { transform: translateX(-50%); } 
+            /* `.description` is a full-width promotional card strip container */
+            .description {
+                position: relative;
+                width: 100%;
+                background: linear-gradient(130deg, #0b2f47 0%, #163f57 48%, #0e2438 100%);
+                border-radius: 14px;
+                padding: 24px 16px;
+                margin: 20px auto;
+                box-shadow: 0 12px 28px rgba(3, 10, 18, 0.35);
+                overflow: hidden;
+                color: #f9fcff;
+                animation: description-entrance 0.8s ease both;
             }
-            
-            /* Entrance Animation for Carousel Cards */
-            .card-item { 
-                opacity: 0; 
-                transform: translateY(20px); 
-                transition: opacity 0.6s ease-out, transform 0.6s cubic-bezier(0.165, 0.84, 0.44, 1); 
+            .description .helo {
+                max-width: 1200px;
+                margin: 0 auto;
             }
-            .card-item.in { opacity: 1; transform: translateY(0); }
+            .description .tool {
+                position: relative;
+                width: 100%;
+            }
+            .card-marquee {
+                position: relative;
+                width: 100%;
+            }
+            .card-marquee .marquee-viewport {
+                width: 100%;
+                overflow: hidden;
+                -webkit-overflow-scrolling: touch;
+                padding: 8px 0 12px 0;
+            }
+            .card-marquee .marquee-runner {
+                display: flex;
+                gap: 18px;
+                align-items: stretch;
+                width: max-content;
+                animation: chain-loop 22s linear infinite;
+                will-change: transform;
+            }
+            .card-marquee:hover .marquee-runner,
+            .card-marquee:focus-within .marquee-runner {
+                animation-play-state: paused;
+            }
+            .card-marquee .card-item {
+                flex: 0 0 auto;
+                width: 210px;
+                min-width: 210px;
+                transform: translateY(20px);
+                opacity: 0;
+                animation: card-fade-in 0.7s ease-out forwards;
+            }
+            .card-marquee .card-item.in {
+                opacity: 1;
+                transform: translateY(0);
+            }
+            .card-marquee .card-item:nth-child(1) { animation-delay: 0.08s; }
+            .card-marquee .card-item:nth-child(2) { animation-delay: 0.16s; }
+            .card-marquee .card-item:nth-child(3) { animation-delay: 0.24s; }
+            .card-marquee .card-item:nth-child(4) { animation-delay: 0.32s; }
+            .card-marquee .card-item:nth-child(5) { animation-delay: 0.40s; }
 
-            .card-marquee .card-item { flex: 0 0 auto; width: min(360px, 100%); }
-             
+            @keyframes chain-loop {
+                0% { transform: translateX(0); }
+                100% { transform: translateX(-50%); }
+            }
+            @keyframes card-fade-in {
+                0% { opacity: 0; transform: translateY(20px); }
+                100% { opacity: 1; transform: translateY(0); }
+            }
+            @keyframes description-entrance {
+                0% { opacity: 0; transform: translateY(12px); }
+                100% { opacity: 1; transform: translateY(0); }
+            }
+
+            /* Pause marquee motion at reduced scale so it stays accessible */
+            .card-marquee:focus-within .marquee-runner,
+            .card-marquee:hover .marquee-runner {
+                animation-play-state: paused;
+            }
+
             /* Scroll controls */
             .card-marquee .scroll-btn { position: absolute; top: 50%; transform: translateY(-50%); width: 44px; height: 44px; border-radius: 50%; background: rgba(15,23,42,0.75); color: #fff; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 20; border: none; }
             .card-marquee .scroll-btn.left { left: 8px; }
@@ -208,11 +270,13 @@
                                             <div class="ad-card">
                                                 <div class="ad-badge">Limited</div>
                                                 <img src="dj.jpg.jpg" alt="Ad image" class="ad-img">
-                                                <div class="ad-content">
-                                                    <h2>Special Offer</h2>
-                                                    <p>The difference between ordinary and extraordinary is that little extra. — Jimmy Johnson</p>
-                                                    <a href="#" class="vtn">Visit Store</a>
-                                                </div>
+<div class="ad-content">
+                    <h2>DJ Services Package</h2>
+                    <p>Professional DJ services for your events. The difference between ordinary and extraordinary is that little extra.</p>
+                    <div class="price">₦150,000 <span class="old-price">₦200,000</span></div>
+                    <div class="discount">-25%</div>
+                    <a href="#" class="vtn">Book Now</a>
+                </div>
                                                 <div class="ad-ticker" aria-hidden="true">
                                                     <div class="runner">
                                                         <span>🔥 SALE — Up to 50% OFF</span>
@@ -230,11 +294,13 @@
                                             <div class="ad-card">
                                                 <div class="ad-badge">Limited</div>
                                                 <img src="m.jpg" alt="Ad image" class="ad-img">
-                                                <div class="ad-content">
-                                                    <h2>Special Offer</h2>
-                                                    <p>The difference between ordinary and extraordinary is that little extra. — Jimmy Johnson</p>
-                                                    <a href="#" class="vtn">Visit Store</a>
-                                                </div>
+<div class="ad-content">
+                    <h2>Music Production Service</h2>
+                    <p>High-quality music production for artists. Create beats that stand out.</p>
+                    <div class="price">₦100,000 <span class="old-price">₦150,000</span></div>
+                    <div class="discount">-33%</div>
+                    <a href="#" class="vtn">Get Started</a>
+                </div>
                                                 <div class="ad-ticker" aria-hidden="true">
                                                     <div class="runner">
                                                         <span>🔥 SALE — Up to 50% OFF</span>
@@ -253,9 +319,11 @@
                                                 <div class="ad-badge">Limited</div>
                                                 <img src="m.jpg" alt="Ad image" class="ad-img">
                                                 <div class="ad-content">
-                                                    <h2>Special Offer</h2>
-                                                    <p>The difference between ordinary and extraordinary is that little extra. — Jimmy Johnson</p>
-                                                    <a href="#" class="vtn">Visit Store</a>
+                                                    <h2>Event Sound System</h2>
+                                                    <p>Top-notch sound equipment for events. Make your event unforgettable.</p>
+                                                    <div class="price">₦250,000 <span class="old-price">₦300,000</span></div>
+                                                    <div class="discount">-17%</div>
+                                                    <a href="#" class="vtn">Rent Now</a>
                                                 </div>
                                                 <div class="ad-ticker" aria-hidden="true">
                                                     <div class="runner">
@@ -278,9 +346,11 @@
                                                 <div class="ad-badge">Limited</div>
                                                 <img src="dj.jpg.jpg" alt="Ad image" class="ad-img">
                                                 <div class="ad-content">
-                                                    <h2>Special Offer</h2>
-                                                    <p>The difference between ordinary and extraordinary is that little extra. — Jimmy Johnson</p>
-                                                    <a href="#" class="vtn">Visit Store</a>
+                                                    <h2>DJ Services Package</h2>
+                                                    <p>Professional DJ services for your events. The difference between ordinary and extraordinary is that little extra.</p>
+                                                    <div class="price">₦150,000 <span class="old-price">₦200,000</span></div>
+                                                    <div class="discount">-25%</div>
+                                                    <a href="#" class="vtn">Book Now</a>
                                                 </div>
                                                 <div class="ad-ticker" aria-hidden="true">
                                                     <div class="runner">
@@ -300,9 +370,11 @@
                                                 <div class="ad-badge">Limited</div>
                                                 <img src="m.jpg" alt="Ad image" class="ad-img">
                                                 <div class="ad-content">
-                                                    <h2>Special Offer</h2>
-                                                    <p>The difference between ordinary and extraordinary is that little extra. — Jimmy Johnson</p>
-                                                    <a href="#" class="vtn">Visit Store</a>
+                                                    <h2>Music Production Service</h2>
+                                                    <p>High-quality music production for artists. Create beats that stand out.</p>
+                                                    <div class="price">₦100,000 <span class="old-price">₦150,000</span></div>
+                                                    <div class="discount">-33%</div>
+                                                    <a href="#" class="vtn">Get Started</a>
                                                 </div>
                                                 <div class="ad-ticker" aria-hidden="true">
                                                     <div class="runner">
