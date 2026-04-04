@@ -31,8 +31,8 @@
             }
 
             /* Book-style hamburger menu (from anesis.html) */
-            .hamburger { display: none; width: 44px; height: 38px; position: relative; z-index: 1200; cursor: pointer; }
-            .hamburger .bar { height: 4px; background: #fff; margin: 6px 0; border-radius: 3px; transition: transform 260ms ease, opacity 200ms ease; }
+.hamburger { display: none; width: 30px; cursor: pointer; position: relative; flex-direction: column; justify-content: space-between; }
+.bar { width: 25px; height: 3px; background: white; margin: 4px 0; transition: all 0.3s ease; }
 
             .navbar { position: fixed; top: 0; width: 100%; z-index: 1000; }
 
@@ -62,10 +62,10 @@
             body.book-open .book-menu { display: flex; }
 
             /* hamburger morph - transform to x with orange color */
-            body.book-open .hamburger .bar { background: orange; }
-            body.book-open .hamburger .bar:nth-child(1) { transform: translateY(10px) rotate(45deg); }
-            body.book-open .hamburger .bar:nth-child(2) { opacity: 0; }
-            body.book-open .hamburger .bar:nth-child(3) { transform: translateY(-10px) rotate(-45deg); }
+body.book-open .hamburger .bar { background: orange; }
+body.book-open .hamburger .bar:nth-child(1) { transform: rotate(45deg) translate(9px, 9px); }
+body.book-open .hamburger .bar:nth-child(2) { opacity: 0; }
+body.book-open .hamburger .bar:nth-child(3) { transform: rotate(-45deg) translate(6px, -6px); }
 
             /* logo shown on the book page background */
             .book-logo { display: block; max-width: 72%; max-height: 72%; width: auto; height: auto; margin: auto; opacity: 0.98; object-fit: contain; filter: drop-shadow(0 8px 18px rgba(2,8,23,0.45)); }
@@ -77,15 +77,15 @@
             }
 
             /* Navbar container */
-            .navbar {
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url(n.jpg);
-                padding: 5px 10px;
-                border-top-right-radius: 8px;
-                border-top-left-radius: 8px;
-            }
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6));
+    padding: 12px 24px;
+    border-radius: 0;
+    z-index: 900;
+}
             /* Logo container */
             .logo {
                 font-size: 25px;
