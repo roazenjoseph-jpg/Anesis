@@ -195,7 +195,7 @@
                 min-width: 210px;
                 opacity: 0;
                 transform: translateY(20px);
-                animation: card-fade-in 0.3s ease-out forwards, card-bob 4.4s ease-in-out infinite 0.75s;
+                animation: card-fade-in 0.3s ease-out forwards;
             }
 
             /* Card item active state */
@@ -254,14 +254,29 @@
                 background: rgba(255,255,255,0.7);
                 cursor: pointer;
                 transition: transform 0.25s ease, background 0.3s ease;
+                position: relative;
             }
             .carousel-dot.active {
                 background: #ff7a00;
                 animation: dot-pulse 1.8s ease-in-out infinite;
             }
+            .carousel-dot.active::after {
+                content: '';
+                position: absolute;
+                bottom: -4px;
+                left: 0;
+                width: 0;
+                height: 2px;
+                background: #ff7a00;
+                animation: dot-progress 20s linear infinite;
+            }
             @keyframes dot-pulse {
                 0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255,122,0,0.3); }
                 50% { transform: scale(1.4); box-shadow: 0 0 0 8px rgba(255,122,0,0.18); }
+            }
+            @keyframes dot-progress {
+                0% { width: 0; }
+                100% { width: 100%; }
             }
 
             /* ===== SCROLLBAR STYLING ===== */
@@ -292,13 +307,6 @@
                 100% { opacity: 1; transform: translateY(0); }
             }
 
-            /* Subtle bobbing animation for cards */
-            @keyframes card-bob {
-                0% { transform: translateY(0); }
-                50% { transform: translateY(-4px); }
-                100% { transform: translateY(4px); }
-            }
-
             /* Horizontal loop animation (currently disabled) */
             @keyframes chain-loop {
                 0% { transform: translateX(100%); }
@@ -309,14 +317,14 @@
             /* ===== RESPONSIVE STYLES ===== */
             @media (max-width: 980px) {
                 .card-marquee .card-item {
-                    width: min(220px, 90vw);
-                    min-width: 220px;
+                    width: 210px;
+                    min-width: 210px;
                 }
             }
 
             @media (max-width: 720px) {
                 .card-marquee .card-item {
-                    width: min(220px, 88vw);
+                    width: 210px;
                     min-width: 210px;
                 }
                 .card-marquee .marquee-runner {
@@ -437,11 +445,11 @@
                                                 <div class="ad-badge">Limited</div>
                                                 <img src="dj.jpg.jpg" alt="Ad image" class="ad-img">
 <div class="ad-content">
-                    <h2>DJ Services Package</h2>
-                    <p>Professional DJ services for your events. The difference between ordinary and extraordinary is that little extra.</p>
-                    <div class="price">₦150,000 <span class="old-price">₦200,000</span></div>
+                    <h2>Washing Machine</h2>
+                    <p>High-efficiency washing machine with multiple wash cycles. Energy-saving and durable.</p>
+                    <div class="price">UGX 150,000 <span class="old-price">UGX 200,000</span></div>
                     <div class="discount">-25%</div>
-                    <a href="#" class="vtn">Book Now</a>
+                    <a href="#" class="vtn">Buy Now</a>
                 </div>
                                                 <div class="ad-ticker" aria-hidden="true">
                                                     <div class="runner">
@@ -461,11 +469,11 @@
                                                 <div class="ad-badge">Limited</div>
                                                 <img src="m.jpg" alt="Ad image" class="ad-img">
 <div class="ad-content">
-                    <h2>Music Production Service</h2>
-                    <p>High-quality music production for artists. Create beats that stand out.</p>
-                    <div class="price">₦100,000 <span class="old-price">₦150,000</span></div>
+                    <h2>Freezer</h2>
+                    <p>Large capacity freezer with fast freezing technology. Perfect for storing food long-term.</p>
+                    <div class="price">UGX 120,000 <span class="old-price">UGX 180,000</span></div>
                     <div class="discount">-33%</div>
-                    <a href="#" class="vtn">Get Started</a>
+                    <a href="#" class="vtn">Buy Now</a>
                 </div>
                                                 <div class="ad-ticker" aria-hidden="true">
                                                     <div class="runner">
@@ -485,11 +493,11 @@
                                                 <div class="ad-badge">Limited</div>
                                                 <img src="m.jpg" alt="Ad image" class="ad-img">
                                                 <div class="ad-content">
-                                                    <h2>Event Sound System</h2>
-                                                    <p>Top-notch sound equipment for events. Make your event unforgettable.</p>
-                                                    <div class="price">₦250,000 <span class="old-price">₦300,000</span></div>
-                                                    <div class="discount">-17%</div>
-                                                    <a href="#" class="vtn">Rent Now</a>
+                                                    <h2>Refrigerator</h2>
+                                                    <p>Spacious refrigerator with advanced cooling system. Keeps your food fresh and organized.</p>
+                                                    <div class="price">UGX 180,000 <span class="old-price">UGX 240,000</span></div>
+                                                    <div class="discount">-25%</div>
+                                                    <a href="#" class="vtn">Buy Now</a>
                                                 </div>
                                                 <div class="ad-ticker" aria-hidden="true">
                                                     <div class="runner">
@@ -512,11 +520,11 @@
                                                 <div class="ad-badge">Limited</div>
                                                 <img src="dj.jpg.jpg" alt="Ad image" class="ad-img">
                                                 <div class="ad-content">
-                                                    <h2>DJ Services Package</h2>
-                                                    <p>Professional DJ services for your events. The difference between ordinary and extraordinary is that little extra.</p>
-                                                    <div class="price">₦150,000 <span class="old-price">₦200,000</span></div>
+                                                    <h2>Washing Machine</h2>
+                                                    <p>High-efficiency washing machine with multiple wash cycles. Energy-saving and durable.</p>
+                                                    <div class="price">UGX 150,000 <span class="old-price">UGX 200,000</span></div>
                                                     <div class="discount">-25%</div>
-                                                    <a href="#" class="vtn">Book Now</a>
+                                                    <a href="#" class="vtn">Buy Now</a>
                                                 </div>
                                                 <div class="ad-ticker" aria-hidden="true">
                                                     <div class="runner">
@@ -536,11 +544,11 @@
                                                 <div class="ad-badge">Limited</div>
                                                 <img src="m.jpg" alt="Ad image" class="ad-img">
                                                 <div class="ad-content">
-                                                    <h2>Music Production Service</h2>
-                                                    <p>High-quality music production for artists. Create beats that stand out.</p>
-                                                    <div class="price">₦100,000 <span class="old-price">₦150,000</span></div>
+                                                    <h2>Freezer</h2>
+                                                    <p>Large capacity freezer with fast freezing technology. Perfect for storing food long-term.</p>
+                                                    <div class="price">UGX 120,000 <span class="old-price">UGX 180,000</span></div>
                                                     <div class="discount">-33%</div>
-                                                    <a href="#" class="vtn">Get Started</a>
+                                                    <a href="#" class="vtn">Buy Now</a>
                                                 </div>
                                                 <div class="ad-ticker" aria-hidden="true">
                                                     <div class="runner">
