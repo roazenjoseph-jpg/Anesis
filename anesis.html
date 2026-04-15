@@ -178,7 +178,6 @@
                 gap: 8px;
                 align-items: stretch;
                 width: max-content;
-                animation: chain-loop 35s linear infinite;
                 will-change: auto;
             }
 
@@ -202,6 +201,11 @@
             .card-marquee .card-item.in {
                 opacity: 1;
                 transform: translateY(0);
+            }
+
+            /* Make promo cards clearly clickable */
+            .description .ad-card {
+                cursor: pointer;
             }
 
             /* ===== SCROLL CONTROLS ===== */
@@ -247,36 +251,65 @@
                 padding-top: 12px;
             }
             .carousel-dot {
-                width: 12px;
-                height: 12px;
+                width: 14px;
+                height: 14px;
                 border-radius: 50%;
-                border: none;
-                background: rgba(255,255,255,0.7);
+                border: 2px solid rgba(255,255,255,0.55);
+                background: transparent;
                 cursor: pointer;
-                transition: transform 0.25s ease, background 0.3s ease;
+                transition: all 0.3s ease;
                 position: relative;
+                overflow: visible;
+            }
+            .carousel-dot::before {
+                content: '';
+                position: absolute;
+                inset: 0;
+                border-radius: 50%;
+                background: rgba(255,255,255,0.12);
+                transform: scale(0);
+                transition: transform 0.28s ease;
+            }
+            .carousel-dot:hover {
+                transform: scale(1.15);
+                border-color: rgba(255,255,255,0.9);
+            }
+            .carousel-dot:hover::before {
+                transform: scale(1);
             }
             .carousel-dot.active {
-                background: #ff7a00;
-                animation: dot-pulse 1.8s ease-in-out infinite;
+                background: linear-gradient(135deg, #ff7a00 0%, #ff9d2f 100%);
+                border-color: #ff7a00;
+                animation: dot-pulse 1.9s ease-in-out infinite;
+                box-shadow: 0 0 0 0 rgba(255,122,0,0.35);
             }
             .carousel-dot.active::after {
                 content: '';
                 position: absolute;
-                bottom: -4px;
                 left: 0;
-                width: 0;
+                bottom: -10px;
+                width: 100%;
                 height: 2px;
                 background: #ff7a00;
-                animation: dot-progress 20s linear infinite;
+                transform: scaleX(0);
+                transform-origin: left;
+                border-radius: 2px;
+                animation: dot-progress 20s linear forwards;
             }
             @keyframes dot-pulse {
-                0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255,122,0,0.3); }
-                50% { transform: scale(1.4); box-shadow: 0 0 0 8px rgba(255,122,0,0.18); }
+                0%, 100% { transform: scale(1.05); box-shadow: 0 0 0 0 rgba(255,122,0,0.35); }
+                50% { transform: scale(1.28); box-shadow: 0 0 0 8px rgba(255,122,0,0.16); }
             }
             @keyframes dot-progress {
-                0% { width: 0; }
-                100% { width: 100%; }
+                0% { transform: scaleX(0); }
+                100% { transform: scaleX(1); }
+            }
+
+            /* Card resonance state */
+            .card-marquee .card-item.active-slide {
+                transform: scale(1.03) translateY(-5px);
+                filter: drop-shadow(0 10px 15px rgba(255,122,0,0.15));
+                transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
             }
 
             /* ===== SCROLLBAR STYLING ===== */
@@ -792,8 +825,8 @@
 
                         const viewport = marquee.querySelector('.marquee-viewport');
                         const runner = marquee.querySelector('.marquee-runner');
-                        // Dots are in the .helo container, not inside .card-marquee
-                        const dotsContainer = document.querySelector('.description .helo .carousel-dots');
+                        // Corrected selector to find dots regardless of nesting
+                        const dotsContainer = document.querySelector('.carousel-dots');
                         const leftBtn = marquee.querySelector('.scroll-btn.left');
                         const rightBtn = marquee.querySelector('.scroll-btn.right');
                         
@@ -834,9 +867,35 @@
                         // Update active dot
                         function updateDots() {
                             const dots = dotsContainer ? dotsContainer.querySelectorAll('.carousel-dot') : [];
+                            const cards = marquee.querySelectorAll('.card-item');
+                            
                             dots.forEach((dot, index) => {
-                                dot.classList.toggle('active', index === currentIndex);
+                                dot.classList.remove('active');
                             });
+                            
+                            cards.forEach(card => {
+                                card.classList.remove('active-slide');
+                            });
+
+                            if (dots[currentIndex]) {
+                                const currentDot = dots[currentIndex];
+                                const currentCard = cards[currentIndex];
+
+                                if (currentCard) {
+                                    currentCard.classList.remove('in');
+                                }
+
+                                requestAnimationFrame(() => {
+                                    void currentDot.offsetWidth;
+                                    currentDot.classList.add('active');
+                                    
+                                    if (currentCard) {
+                                        void currentCard.offsetWidth;
+                                        currentCard.classList.add('in');
+                                        currentCard.classList.add('active-slide');
+                                    }
+                                });
+                            }
                         }
 
                         // Calculate card width including gap
@@ -878,10 +937,8 @@
                         // Start auto-play
                         function startAutoPlay() {
                             stopAutoPlay();
-                            stopDotLoop();
                             if (!isHovering) {
                                 autoPlayInterval = setInterval(nextSlide, autoPlayDelay);
-                                startDotLoop();
                             }
                         }
 
@@ -891,15 +948,6 @@
                                 clearInterval(autoPlayInterval);
                                 autoPlayInterval = null;
                             }
-                            stopDotLoop();
-                        }
-
-                        function startDotLoop() {
-                            stopDotLoop();
-                            dotLoopInterval = setInterval(() => {
-                                currentIndex = (currentIndex + 1) % originalCards.length;
-                                updateDots();
-                            }, autoPlayDelay);
                         }
 
                         function stopDotLoop() {
@@ -1062,6 +1110,40 @@
                         }
                         
                         startAutoPlay();
+                    })();
+                </script>
+                <script>
+                    // Make each promo card clickable (section.description)
+                    (function () {
+                        const targetUrl = 'https://wa.me/c/256780644224';
+                        const cards = document.querySelectorAll('.description .ad-card');
+                        if (!cards.length) return;
+
+                        cards.forEach((card) => {
+                            card.setAttribute('tabindex', '0');
+                            card.setAttribute('role', 'link');
+                            card.setAttribute('aria-label', 'Open product catalog on WhatsApp');
+
+                            card.addEventListener('click', (event) => {
+                                // Allow normal behavior for existing buttons/links inside card
+                                if (event.target.closest('a, button')) return;
+                                window.open(targetUrl, '_blank');
+                            });
+
+                            card.addEventListener('keydown', (event) => {
+                                if (event.key === 'Enter' || event.key === ' ') {
+                                    event.preventDefault();
+                                    window.open(targetUrl, '_blank');
+                                }
+                            });
+                        });
+
+                        // Update existing Buy Now links to same target
+                        document.querySelectorAll('.description .vtn').forEach((btn) => {
+                            btn.setAttribute('href', targetUrl);
+                            btn.setAttribute('target', '_blank');
+                            btn.setAttribute('rel', 'noopener noreferrer');
+                        });
                     })();
                 </script>
         </section>
@@ -1306,17 +1388,21 @@
             if (!runners.length) return;
             const rand = (min, max) => Math.random() * (max - min) + min;
 
-            runners.forEach(runner => {
+            runners.forEach((runner) => {
                 // duplicate content to make a seamless loop
                 if (!runner.dataset.dup) {
                     runner.innerHTML = runner.innerHTML + runner.innerHTML;
                     runner.dataset.dup = '1';
                 }
 
-                function applyRandom() {
-                    const dur = (rand(18, 30)).toFixed(2) + 's'; // 18-30s slower
-                    const delay = (rand(0, 4)).toFixed(2) + 's'; // small offset
-                    const dir = Math.random() > 0.88 ? 'reverse' : 'normal'; // rare reverse
+                // subtle per-runner variation
+                const dur = (rand(18, 30)).toFixed(2) + 's';
+                const delay = (rand(0, 4)).toFixed(2) + 's';
+                const dir = Math.random() > 0.88 ? 'reverse' : 'normal';
+                runner.style.animationDuration = dur;
+                runner.style.animationDelay = delay;
+                runner.style.animationDirection = dir;
+
                 // respect hover/focus (pause animation)
                 runner.addEventListener('mouseenter', () => runner.style.setProperty('animation-play-state', 'paused'));
                 runner.addEventListener('mouseleave', () => runner.style.removeProperty('animation-play-state'));
