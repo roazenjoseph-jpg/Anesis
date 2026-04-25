@@ -837,9 +837,10 @@
                         });
                         
                         let currentIndex = 0;
-                        let autoPlayInterval;
+                        let autoPlayIntervalId;
                         const autoPlayDelay = 20000; // 20 seconds between slides for smooth running
                         let isHovering = false;
+                        let scrollDirection = 1; // 1 for forward, -1 for backward
 
                         // Create dots dynamically based on number of original cards
                         function createDots() {
@@ -874,13 +875,17 @@
                             });
                             
                             cards.forEach(card => {
+                            allCards.forEach(card => {
                                 card.classList.remove('active-slide');
                             });
 
                             if (dots[currentIndex]) {
                                 const currentDot = dots[currentIndex];
                                 const currentCard = cards[currentIndex];
+                                currentDot.classList.add('active');
+                            }
 
+                            const cardToHighlight = allCards[currentIndex]; // Highlight the card in the first set
                                 if (currentCard) {
                                     currentCard.classList.remove('in');
                                 }
@@ -890,7 +895,7 @@
                                     currentDot.classList.add('active');
                                     
                                     if (currentCard) {
-                                        void currentCard.offsetWidth;
+                                        void cardToHighlight.offsetWidth;
                                         currentCard.classList.add('in');
                                         currentCard.classList.add('active-slide');
                                     }
@@ -902,6 +907,7 @@
                         function getCardWidth() {
                             const card = originalCards[0];
                             if (!card) return 378; // fallback
+                            if (!card) return 220; // Fallback to a reasonable default width
                             const style = window.getComputedStyle(runner);
                             const gap = parseInt(style.gap) || 18;
                             return card.offsetWidth + gap;
@@ -970,14 +976,16 @@
                         // Event listeners
                         if (leftBtn) {
                             leftBtn.addEventListener('click', () => {
-                                prevSlide();
+                                scrollDirection = -1; // Set direction to backward
+                                nextSlide(); // Call nextSlide which will use the direction
                                 startAutoPlay();
                             });
                         }
 
                         if (rightBtn) {
                             rightBtn.addEventListener('click', () => {
-                                nextSlide();
+                                scrollDirection = 1; // Set direction to forward
+                                nextSlide(); // Call nextSlide which will use the direction
                                 startAutoPlay();
                             });
                         }
@@ -1028,17 +1036,19 @@
                             if (!isDragging) return;
                             const dx = dragStartX - event.clientX;
                             viewport.scrollLeft = dragStartScroll + dx;
+                            handleScroll(); // Call handleScroll during drag to update position and potentially loop
                         });
 
-                        viewport.addEventListener('pointerup', () => {
+                        viewport.addEventListener('pointerup', (event) => { // Added event parameter
                             if (!isDragging) return;
                             isDragging = false;
-                            viewport.style.scrollBehavior = 'smooth';
+                            viewport.style.scrollBehavior = 'smooth'; // Re-enable smooth scroll
                             isHovering = false;
                             setTimeout(startAutoPlay, 1200);
+                            viewport.releasePointerCapture(event.pointerId); // Release pointer
                         });
 
-                        viewport.addEventListener('pointerleave', () => {
+                        viewport.addEventListener('pointerleave', (event) => { // Added event parameter
                             if (!isDragging) return;
                             isDragging = false;
                             viewport.style.scrollBehavior = 'smooth';
@@ -1059,10 +1069,10 @@
                         // Keyboard navigation
                         marquee.addEventListener('keydown', (e) => {
                             if (e.key === 'ArrowLeft') {
-                                prevSlide();
+                                scrollDirection = -1;
                                 startAutoPlay();
                             } else if (e.key === 'ArrowRight') {
-                                nextSlide();
+                                scrollDirection = 1;
                                 startAutoPlay();
                             }
                         });
@@ -1078,6 +1088,7 @@
                             clearTimeout(resizeTimeout);
                             resizeTimeout = setTimeout(() => {
                                 goToSlide(currentIndex);
+                                goToSlide(currentIndex); // Recalculate card width and jump to current slide to adjust position
                             }, 250);
                         });
 
